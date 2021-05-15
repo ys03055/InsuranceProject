@@ -16,6 +16,10 @@ public class InsuranceProductServiceImpl implements InsuranceProductService{
 	public ArrayList<InsuranceProduct> showAllList() {
 		return insuranceProductListImpl.getInsuranceProductList();
 	}
+	
+	public ArrayList<InsuranceProduct> approvalInsuranceProduct(){
+		return insuranceProductListImpl.getapprovalInsuranceProductList();
+	}
 
 	public void designInsuranceProduct(InsuranceProducts insuranceProducts) {
 		InsuranceProduct developedProduct = insuranceProducts.designInsurance().developInsurance();

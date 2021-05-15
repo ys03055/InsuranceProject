@@ -1,13 +1,26 @@
 package entity;
+
+import type.CancerType;
+
 public class Cancer extends InsuranceProduct {
 
 	private String cancerList;
 	private String guaranteedType;
 	private int limitAge;
 	public CancerHistory m_CancerHistory;
+	private CancerType cancerType;
 
 	public Cancer() {
+		//m_CancerHistory.getClientCancerCareer();
+		//m_CancerHistory.getFamilyCancerCareer();
+	}
 
+	public CancerType getCancerType() {
+		return cancerType;
+	}
+
+	public void setCancerType(CancerType cancerType) {
+		this.cancerType = cancerType;
 	}
 
 	public String getCancerList() {
