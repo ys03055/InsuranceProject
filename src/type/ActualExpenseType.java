@@ -1,5 +1,4 @@
 package type;
-import entity.ActualExpense;
 public enum ActualExpenseType {
 	ADMISSION("입원"), HOSPITALTREATMENT("병원진료비"), MEDICINEPRESCRIPTION("약처방비");
 	

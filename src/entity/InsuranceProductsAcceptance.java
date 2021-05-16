@@ -1,7 +1,5 @@
 package entity;
 
-import controller.ConsoleController;
-
 public class InsuranceProductsAcceptance extends Manager {
 
 	public InsuranceProductsAcceptance(){
