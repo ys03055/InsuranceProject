@@ -16,6 +16,10 @@ public class InsuranceProductServiceImpl implements InsuranceProductService{
 	public ArrayList<InsuranceProduct> showAllList() {
 		return insuranceProductListImpl.getInsuranceProductList();
 	}
+	
+	public ArrayList<InsuranceProduct> showInsuranceProductIsApproval(){
+		return insuranceProductListImpl.searchListByApproval(true);
+	}
 
 	public void designInsuranceProduct(InsuranceProducts insuranceProducts) {
 		InsuranceProduct developedProduct = insuranceProducts.designInsurance().developInsurance();
@@ -30,9 +34,5 @@ public class InsuranceProductServiceImpl implements InsuranceProductService{
 	
 	public InsuranceProductListImpl getInsuranceProductList() {
 		return this.insuranceProductListImpl;
-	}
-	
-	public ArrayList<InsuranceProduct> showInsuranceProductIsApproval(){
-		return insuranceProductListImpl.searchListByApproval(true);
 	}
 }

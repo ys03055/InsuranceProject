@@ -1,20 +1,14 @@
 package controller;
-
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import entity.Accident;
-import entity.ActualExpense;
-import entity.Cancer;
 import entity.Client;
 import entity.CompensationHandle;
 import entity.Contract;
 import entity.InsuranceProduct;
 import entity.InsuranceProducts;
 import entity.InsuranceProductsAcceptance;
-import entity.Life;
 import entity.Manager;
-import entity.Pension;
 import service.ClientServiceImpl;
 import service.ContractServiceImpl;
 import service.InsuranceProductServiceImpl;
@@ -38,17 +32,16 @@ public class ConsoleController {
 		this.managerService = new ManagerServiceImpl();
 		this.insuranceProduct = new InsuranceProduct();
 		this.contractService = new ContractServiceImpl();
+		this.contractService.association(insuranceProductService.getInsuranceProductList());
 		this.managerLogin = null;
 		this.clientLogin = null;
-		this.contractService.association(insuranceProductService.getInsuranceProductList());
-
 	}
-
-	public void run() {
+	
+	public void run() {//MainMenu실행
 		this.mainMenu();
 	}
 
-	private void mainMenu() {
+	private void mainMenu() {//MainMenu
 		while (true) {
 			System.out.println("\n---MainMenu---");
 			System.out.println("1.관리자");
@@ -165,7 +158,6 @@ public class ConsoleController {
 					return;
 				} else
 				insuranceMenu();
-				approvalMenu();
 				break;
 			case 2:
 				if (insuranceProductService.showInsuranceProductIsApproval().isEmpty()) {
