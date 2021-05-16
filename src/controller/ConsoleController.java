@@ -2,6 +2,8 @@ package controller;
 import java.util.ArrayList;
 import java.util.Scanner;
 import entity.Accident;
+import entity.ActualExpense;
+import entity.Cancer;
 import entity.Client;
 import entity.CompensationHandle;
 import entity.Contract;
@@ -56,9 +58,9 @@ public class ConsoleController {
 				clientMenu();
 				break;
 			case 3:
-				if (insuranceProductService.showAllList().isEmpty()) {//초기화면에서 보험 목록보여주는 페이지
+				if (insuranceProductService.showAllList().isEmpty()) {//초기화면에서 보험 목록 보여주는 페이지
 					System.out.println("---현재 상품 준비중입니다.---");
-					return;
+					break;
 				} else {
 					insuranceMenu();
 					return;
@@ -71,7 +73,7 @@ public class ConsoleController {
 		}
 	}
 
-	private void managerMenu() {// ManagerMenus
+	private void managerMenu() {// ManagerMenu
 		while (true) {
 			System.out.println("\n---ManagerMenu---");
 			System.out.println("1.관리자 등록");
@@ -79,10 +81,10 @@ public class ConsoleController {
 			System.out.println("3.관리자 삭제");
 			System.out.println("4.돌아가기");
 			switch (sc.nextInt()) {
-			case 1:
+			case 1://managerRegisterMenu로 바꿔야함
 				System.out.println(managerService.register() ? "등록이 완료되었습니다." : "등록에 실패하였습니다.");
 				break;
-			case 2:
+			case 2://managerLoginMenu로 바꿔야함
 				if (managerLogin == null)
 					managerLogin = managerService.login();
 				if (managerLogin != null)
@@ -90,7 +92,7 @@ public class ConsoleController {
 				else
 					System.out.println("등록되지 않은 매니저입니다.");
 				break;
-			case 3:
+			case 3://managerDeleteMenu로 바꿔야함
 				System.out.println(managerService.delete() ? "삭제가 완료되었습니다." : "삭제에 실패하였습니다.");
 				break;
 			case 4:
@@ -102,8 +104,8 @@ public class ConsoleController {
 		}
 	}
 
-	private void managerWorkMenu() {
-		switch (managerLogin.getJobPosition()) {
+	private void managerWorkMenu() {//managerWorkMenu
+		switch (managerLogin.getJobPosition()) {//manager직업마다 다른 메뉴
 		case IP:
 			insuranceProductsMenu();
 			break;
@@ -125,7 +127,7 @@ public class ConsoleController {
 		}
 	}
 
-	private void insuranceProductsMenu() {// IP
+	private void insuranceProductsMenu() {// IP(보험상품개발자)
 		InsuranceProducts ip = (InsuranceProducts) managerLogin;
 		while (true) {
 			System.out.println("\n---InsuranceProductsMenu---");
@@ -134,11 +136,11 @@ public class ConsoleController {
 			System.out.println("3.로그아웃");
 			switch (sc.nextInt()) {
 			case 1:
-				InsuranceProduct developedProduct = ip.designInsurance().developInsurance();
+				InsuranceProduct developedProduct = ip.designInsurance().developInsurance();//보험상품설계개발
 				insuranceProductService.add(developedProduct);
 				break;
 			case 2:
-				followUpInsurance(insuranceProduct);
+				followUpInsurance(insuranceProduct);//사후관리
 				break;
 			case 3:
 				managerLogin = null;
@@ -146,10 +148,10 @@ public class ConsoleController {
 			}
 		}
 	}
-	private void insuranceProductsAcceptanceMenu(){
+	private void insuranceProductsAcceptanceMenu(){//IPA(보험상품승인자)
 		InsuranceProductsAcceptance ipa = (InsuranceProductsAcceptance) managerLogin;
 		while (true) {
-			System.out.println("---insuranceProductsAcceptanceMenu---");
+			System.out.println("---InsuranceProductsAcceptanceMenu---");
 			System.out.println("1.승인할 보험 선택하기 2.승인된 보험 삭제 3.로그아웃");
 			switch (sc.nextInt()) {
 			case 1:
@@ -157,7 +159,7 @@ public class ConsoleController {
 					System.out.println("현재 만들어진 보험이 없습니다.");
 					return;
 				} else
-				insuranceMenu();
+				approvalMenu(insuranceMenu());
 				break;
 			case 2:
 				if (insuranceProductService.showInsuranceProductIsApproval().isEmpty()) {
@@ -166,7 +168,7 @@ public class ConsoleController {
 				}else 
 					System.out.println("--현재 승인된 보험 목록입니다.--");
 					insuranceProductService.showInsuranceProductIsApproval();
-					approvalInsuranceDelete();
+					approvalInsuranceDelete();//승인한보험삭제
 				break;
 			case 3:
 				managerLogin = null;
@@ -174,32 +176,12 @@ public class ConsoleController {
 			}
 		}
 	}
-	private void approvalMenu() {
-		System.out.println("\n--승인할 보험의 번호를 입력해주세요.--");
-		int a = sc.nextInt();
-		InsuranceProduct aip = insuranceProductService.showAllList().get(a-1);
-		switch (aip.getInsuranceProductType()) {
-		case ACTUALEXPENSE:
-			System.out.println("상품명: " + aip.getProductName());
-			break;
-		case CANCER:
-			System.out.println();
-			break;
-		case LIFE:
-			System.out.println();
-			break;
-		case PENSION:
-			System.out.println();
-			break;
-		default:
-			break;
-		}
+	private void approvalMenu(InsuranceProduct insuranceProduct) {//승인메뉴
 		System.out.println("\n1.보험승인 2.보험승인거절 3.돌아가기");
 		int input = sc.nextInt();
 		switch (input) {
 		case 1:
-			aip.setApproval(true);
-			//
+			insuranceProduct.setApproval(true);
 			System.out.println("승인이 완료되었습니다.");
 			return;
 		case 2:
@@ -210,7 +192,7 @@ public class ConsoleController {
 		}
 	}
 	
-	private void approvalInsuranceDelete() {
+	private void approvalInsuranceDelete() {//승인한보험삭제
 		System.out.println("--삭제할 보험을 선택해주세요.--");
 		int a = sc.nextInt();
 		
@@ -224,14 +206,14 @@ public class ConsoleController {
 		}
 	}
 
-	public void followUpInsurance(InsuranceProduct InsuranceProduct) {
+	public void followUpInsurance(InsuranceProduct InsuranceProduct) {//사후관리
 		System.out.println("보험목록에서 사후관리할 보험을 선택해주세요.");
 		insuranceMenu();
 		sc.nextInt();
 		System.out.println("1.기본보험료 관리 2.납입기간 관리 3.납입주기 관리");
 	}
 
-	private void clientMenu() {// clientMenus
+	private void clientMenu() {// clientMenu
 		while (true) {
 			System.out.println("\n---ClientMenu---");
 			System.out.println("1.회원가입");
@@ -240,10 +222,10 @@ public class ConsoleController {
 			System.out.println("4.돌아가기");
 			switch (sc.nextInt()) {
 			case 1:
-				clientService.register();
+				clientService.register();//clientRegisterMenu로 바꾸기
 				break;
 			case 2:
-				if (clientLogin == null)
+				if (clientLogin == null)//로그인도 clientLoginMenu로 바꾸기
 					clientLogin = clientService.login();
 				if (clientLogin != null)
 					clientWorkMenu();
@@ -251,7 +233,7 @@ public class ConsoleController {
 					System.out.println("입력한 정보가 잘못되었습니다.");
 				break;
 			case 3:
-				clientService.delete();
+				clientService.delete();//clientDeleteMenu로 바꾸기
 				break;
 			case 4:
 				return;
@@ -271,8 +253,11 @@ public class ConsoleController {
 			return;
 		}
 	}
+	private void clientRegisterMenu() {
+		
+	}
 	
-	private void underWriterMenu() {
+	private void underWriterMenu() {//UW(UW)
 //		UW uw = (UW)managerLogin;
 		while(true) {
 			System.out.println("\n---UWMenu---");
@@ -336,7 +321,7 @@ public class ConsoleController {
 		System.out.println("병원진료: " + client.getMedicalHistory().getNumberOfHospitalVisits());
 	}
 	
-	private void contractManagerMenu() {
+	private void contractManagerMenu() {//CM(계약관리자)
 		//ContractManagement contractManagement = (ContractManagement)managerLogin;
 		while(true) {
 			System.out.println("\n---ContractManagementMenu---");
@@ -344,7 +329,7 @@ public class ConsoleController {
 		}
 	}
 	
-	private void compensationHandleMenu() {
+	private void compensationHandleMenu() {//CH(보상처리자)
 		CompensationHandle compensationHandle = (CompensationHandle)managerLogin;
 		while(true) {
 			System.out.println("\n---CompensationHandleMenu---");
@@ -401,7 +386,7 @@ public class ConsoleController {
 		}
 	}
 	
-	private void salesPersonMenu() {
+	private void salesPersonMenu() {//SP(영업사원)
 		while(true) {
 			System.out.println("\n---salesPersonMenu---");
 			System.out.println("1.영업 활동 관리");
@@ -418,10 +403,10 @@ public class ConsoleController {
 			}
 		}
 	}
-	private void insuranceMenu() {
+	private InsuranceProduct insuranceMenu() {
 		System.out.println("\n---InsuranceList---");
 		int i = 1;
-		ArrayList<InsuranceProduct> insuranceProductList = insuranceProductService.showInsuranceProductIsApproval();
+		ArrayList<InsuranceProduct> insuranceProductList = insuranceProductService.showAllList();//showAllList로 수정했음
 		for(InsuranceProduct insuranceProduct : insuranceProductList) {
 			System.out.println(i+". " + insuranceProduct.getProductName() +" "+ insuranceProduct.getInsuranceProductType().getInsuranceName());
 			i++;
@@ -429,8 +414,8 @@ public class ConsoleController {
 		System.out.println("상세정보를 볼 보험상품의 번호를 입력해주세요.");
 		InsuranceProduct selectInsurance = insuranceProductList.get(sc.nextInt()-1);
 		this.showInsuranceProductDetail(selectInsurance);
-		if(clientLogin != null)
-			registerInsuranceMenu(selectInsurance);
+		return selectInsurance;
+		
 	}
 	
 	private void showInsuranceProductDetail(InsuranceProduct insuranceProduct) {
@@ -456,10 +441,15 @@ public class ConsoleController {
 	}
 	
 	private void actualexpenseInfo() {
-		
+		ActualExpense actualExpenseDetailInfo = new ActualExpense();
+		System.out.println("제한나이: " + actualExpenseDetailInfo.getLimitAge() + " 자기부담금: " + actualExpenseDetailInfo.getSelfPayment() + " 보장내역: " + actualExpenseDetailInfo.getActualExpenseType() 
+		+ " 보장금액: " + actualExpenseDetailInfo.getLimitOfIndemnity());
 	}
 	
 	private void cancerInfo() {
+		Cancer cancerDetailInfo = new Cancer();
+		System.out.println("제한나이: " + cancerDetailInfo.getLimitAge() + " 보장내역: " + cancerDetailInfo.getCancerType().getCancerName() + cancerDetailInfo.getCancerType().getRate()
+				+ " 보험금: " + cancerDetailInfo.getInsuranceMoney());
 		
 	}
 	
