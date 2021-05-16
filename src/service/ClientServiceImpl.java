@@ -99,4 +99,8 @@ public class ClientServiceImpl implements ClientService {
 		}
 		return false;
 	}
+	public Client search(String clientID) {
+		return clientListImpl.search(clientID);
+	}
+
 }
