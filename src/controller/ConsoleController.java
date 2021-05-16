@@ -54,7 +54,7 @@ public class ConsoleController {
 				clientMenu();
 				break;
 			case 3:
-				if (insuranceProductService.showAllList().isEmpty()) {
+				if (insuranceProductService.showAllList().isEmpty()) {//초기화면에서 보험 목록보여주는 페이지
 					System.out.println("---현재 상품 준비중입니다.---");
 					return;
 				} else {
@@ -136,6 +136,7 @@ public class ConsoleController {
 				insuranceProductService.add(developedProduct);
 				break;
 			case 2:
+				FollowUpInsurance(insuranceProduct);
 				break;
 			case 3:
 				managerLogin = null;
@@ -143,8 +144,7 @@ public class ConsoleController {
 			}
 		}
 	}
-
-	private void insuranceProductsAcceptanceMenu() {// IPA
+	private void insuranceProductsAcceptanceMenu(){
 		InsuranceProductsAcceptance ipa = (InsuranceProductsAcceptance) managerLogin;
 		while (true) {
 			System.out.println("---insuranceProductsAcceptanceMenu---");
@@ -155,7 +155,7 @@ public class ConsoleController {
 					System.out.println("현재 만들어진 보험이 없습니다.");
 					return;
 				} else
-					insuranceMenu();
+				insuranceMenu();
 				approvalMenu();
 				break;
 			case 2:
@@ -173,34 +173,22 @@ public class ConsoleController {
 			}
 		}
 	}
-
 	private void approvalMenu() {
 		System.out.println("\n--승인할 보험의 번호를 입력해주세요.--");
 		int a = sc.nextInt();
-		InsuranceProduct aip = insuranceProductService.showAllList().get(a - 1);
-		ActualExpense aae = (ActualExpense) insuranceProductService.showAllList().get(a - 1);
-		Cancer cae = (Cancer) insuranceProductService.showAllList().get(a-1);
-		Life lae = (Life) insuranceProductService.showAllList().get(a-1);
-		Pension pae = (Pension) insuranceProductService.showAllList().get(a-1);
+		InsuranceProduct aip = insuranceProductService.showAllList().get(a-1);
 		switch (aip.getInsuranceProductType()) {
 		case ACTUALEXPENSE:
-			System.out.println("상품명: " + aip.getProductName() + " 기본보험료: " + aip.getBasicInsurancePremium() + " 납입기간: "
-					+ aip.getPaymentPeriod() + " 납입주기: " + aip.getPaymentCycle() + " 제한나이: " + aae.getLimitAge()
-					+ " 보장내역: " + aae.getActualExpenseType().values()[a-1].getactualexpensename() + " 보험금:" + aae.getInsuranceMoney());
+			System.out.println("상품명: " + aip.getProductName());
 			break;
 		case CANCER:
-			System.out.println("상품명: " + cae.getProductName() + " 기본보험료: " + cae.getBasicInsurancePremium() + " 납입기간: "
-					+ cae.getPaymentPeriod() + " 납입주기: " + cae.getPaymentCycle() + " 제한나이: " + cae.getLimitAge()
-					+ " 보장내역: " + cae.getCancerType().values()[a-1].getCancerName() + cae.getCancerType().values()[a-1].getRate() + " 보험금:" + aae.getInsuranceMoney());
+			System.out.println();
 			break;
 		case LIFE:
-			System.out.println("상품명: " + lae.getProductName() + " 기본보험료: " + lae.getBasicInsurancePremium() + " 납입기간: "
-					+ lae.getPaymentPeriod() + " 납입주기: " + lae.getPaymentCycle() + " 제한나이: " + cae.getLimitAge()
-					+ " 보험금:" + aae.getInsuranceMoney());
+			System.out.println();
 			break;
 		case PENSION:
-			System.out.println("상품명: " + pae.getProductName() + " 기본보험료: " + pae.getBasicInsurancePremium() + " 납입기간: "
-					+ pae.getPaymentPeriod() + " 납입주기: " + pae.getPaymentCycle() + " 보험금:" + pae.getInsuranceMoney());
+			System.out.println();
 			break;
 		default:
 			break;
@@ -212,7 +200,7 @@ public class ConsoleController {
 			aip.setApproval(true);
 			insuranceProductService.showAllList().remove(aip);
 			insuranceProductService.approvalInsuranceProduct().add(aip);
-			// insuranceProduct.setApproval(true);
+			//insuranceProduct.setApproval(true);
 			System.out.println("승인이 완료되었습니다.");
 			return;
 		case 2:
@@ -226,16 +214,23 @@ public class ConsoleController {
 	
 	private void approvalInsuranceDelete() {
 		System.out.println("--삭제할 보험을 선택해주세요.--");
-		insuranceProductService.approvalInsuranceProduct();
 		int a = sc.nextInt();
+		
 		System.out.println("1.삭제하기 2.돌아가기");
-		switch(a) {
+		switch(sc.nextInt()) {
 		case 1:
 			insuranceProductService.approvalInsuranceProduct().remove(a-1);
 			break;
 		case 2:
 			return;
 		}
+	}
+
+	public void FollowUpInsurance(InsuranceProduct InsuranceProduct) {
+		System.out.println("보험목록에서 사후관리할 보험을 선택해주세요.");
+		insuranceMenu();
+		sc.nextInt();
+		System.out.println("1.기본보험료 관리 2.납입기간 관리 3.납입주기 관리");
 	}
 
 	private void clientMenu() {// clientMenus
@@ -272,7 +267,7 @@ public class ConsoleController {
 		case 1:
 			basicInsuranceMenu();
 		case 2:
-
+			
 		case 3:
 			clientLogin = null;
 			return;

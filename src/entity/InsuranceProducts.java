@@ -118,7 +118,7 @@ public class InsuranceProducts extends Manager{
 		System.out.println("보장기간 입력해주세요. (단위: 만 나이)");
 		pension.setGuaranteedPeriod(sc.nextInt());
 		
-		System.out.println("보상금액을 입력해주세요. (단위: 매월 x원)");
+		System.out.println("보험금을 입력해주세요. (단위: 매월 x원)");
 		pension.setInsuranceMoney(sc.nextInt());
 		
 		return pension;
@@ -135,19 +135,18 @@ public class InsuranceProducts extends Manager{
 		System.out.println("납입기간을 입력해주세요.(단위: 년)");
 		life.setPaymentPeriod(sc.nextInt());
 		
-		System.out.println("납입주기를 입력해주세요.(단위: 매월 일)");
+		System.out.println("필수납입기간을 입력해주세요.(단위: 매월 일)");
 		life.setRequiredPaymentPeriod(sc.nextInt());
 		
-		System.out.println("보장기간 입력해주세요. (단위: 만 나이)");
+		System.out.println("납입주기 입력해주세요. (단위: 만 나이)");
 		life.setPaymentCycle(sc.nextInt());
 		
-		System.out.println("보상금액을 입력해주세요. (단위: 매월 원)");
+		System.out.println("보험금을 입력해주세요. (단위: 매월 원)");
 		life.setInsuranceMoney(sc.nextInt());
 		
 		return life;
 	}
-	public void FollowUpInsurance(InsuranceProduct InsuranceProduct) {	
-	}
+	
 	public InsuranceProducts clone() {
 		return (InsuranceProducts) super.clone();
 	}
