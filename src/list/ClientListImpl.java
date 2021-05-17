@@ -6,7 +6,6 @@ import java.util.Scanner;
 import entity.Client;
 
 public class ClientListImpl implements ClientList {
-	Scanner sc = new Scanner(System.in);
 	ArrayList<Client> clientList = new ArrayList<Client>();
 
 	public ArrayList<Client> getClientList() {

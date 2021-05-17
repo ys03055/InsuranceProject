@@ -13,13 +13,17 @@ public class InsuranceProductServiceImpl implements InsuranceProductService{
 		this.insuranceProductListImpl = new InsuranceProductListImpl();
 	}
 
-	public ArrayList<InsuranceProduct> showAllList() {
+	public ArrayList<InsuranceProduct> showAllList() {//true든 false든 다 보여주기
 		return insuranceProductListImpl.getInsuranceProductList();
 	}
 	
-	public ArrayList<InsuranceProduct> showInsuranceProductIsApproval(){
+	public ArrayList<InsuranceProduct> showInsuranceProductIsApproval(){//true만 보여주기
 		return insuranceProductListImpl.searchListByApproval(true);
 	}
+	
+	public ArrayList<InsuranceProduct> showInsuranceProductIsNotApproval() {//false만 보여주기
+        return insuranceProductListImpl.searchListByApproval(false);
+    }
 
 	public void designInsuranceProduct(InsuranceProducts insuranceProducts) {
 		InsuranceProduct developedProduct = insuranceProducts.designInsurance().developInsurance();
