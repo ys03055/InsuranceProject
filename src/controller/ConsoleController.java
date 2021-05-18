@@ -400,7 +400,6 @@ public class ConsoleController {
 			return;
 		case 2:
 			insuranceProductService.showInsuranceProductIsNotApproval().remove(insuranceProduct);
-			System.out.println(insuranceProductService.showAllList().size());
 			System.out.println("승인이 거절 되었습니다. 목록에서 삭제합니다.");
 			return;
 		case 3:
@@ -447,7 +446,7 @@ public class ConsoleController {
 			message.setSubject("Test"); // 메일 제목을 입력
 			message.setText("Test"); // 메일 내용을 입력
 			Transport.send(message); //// 전송
-			System.out.println("message sent successfully...");
+			System.out.println("Message sent successfully...!!");
 		} catch (AddressException e) {
 			e.printStackTrace();
 		} catch (MessagingException e) {
@@ -629,9 +628,8 @@ public class ConsoleController {
 			insuranceMenu(insuranceProductService.showInsuranceProductIsApproval());
 			contractRegisterClient();
 		case 2:
-			
+
 		case 3:
-		case 4:
 			clientLogin = null;
 			return;
 		}
@@ -645,8 +643,6 @@ public class ConsoleController {
 			break;
 		case 2:
 			return;
-			
-		
 		}
 	}
 	
@@ -781,33 +777,38 @@ public class ConsoleController {
 		System.out.println("납입주기: " + insuranceProduct.getPaymentCycle());
 		switch(insuranceProduct.getInsuranceProductType()) {
 		case ACTUALEXPENSE: 
-			this.actualexpenseInfo(); 
+			this.actualexpenseInfo(insuranceProduct); 
 			break;
 		case CANCER: 
-			this.cancerInfo(); 
+			this.cancerInfo(insuranceProduct); 
 			break;
 		case PENSION: 
-			this.pensionInfo(); 
+			this.pensionInfo(insuranceProduct); 
 			break;
 		case LIFE: 
-			this.lifeInfo(); 
+			this.lifeInfo(insuranceProduct); 
 			break;
 		}
 	}
 	
-	private void actualexpenseInfo() {//미완성
+	private void actualexpenseInfo(InsuranceProduct insuranceProduct) {// 21.05.19 완성
+		ActualExpense actualExpense = (ActualExpense)insuranceProduct;
+		System.out.println("제한나이: " + actualExpense.getLimitAge() + " \n보장한도: " + actualExpense.getLimitOfIndemnity() + " \n자기부담금: " + actualExpense.getSelfPayment());
+	}
+
+	private void cancerInfo(InsuranceProduct insuranceProduct) {
+		Cancer cancer = (Cancer)insuranceProduct;
+		System.out.println("제한나이: " + cancer.getLimitAge() + "\n보장내역: " + cancer.getCancerType().getCancerName() + cancer.getCancerType().getRate() + "\n보험금: " + cancer.getInsuranceMoney());
 	}
 	
-	private void cancerInfo() {
-		
+	private void pensionInfo(InsuranceProduct insuranceProduct) {
+		Pension pension = (Pension)insuranceProduct;
+		System.out.println("보장기간: " + pension.getGuaranteedPeriod() + "\n보험금: " + pension.getInsuranceMoney());
 	}
 	
-	private void pensionInfo() {
-		
-	}
-	
-	private void lifeInfo() {
-		
+	private void lifeInfo(InsuranceProduct insuranceProduct) {
+		Life life = (Life)insuranceProduct;
+		System.out.println("\n필수납입기간" + life.getRequiredPaymentPeriod()+ "\n보험금" + life.getInsuranceMoney());
 	}
 
 }
