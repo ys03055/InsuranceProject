@@ -2,41 +2,35 @@ package service;
 import java.util.ArrayList;
 
 import entity.InsuranceProduct;
-import entity.InsuranceProducts;
+import list.InsuranceProductList;
 import list.InsuranceProductListImpl;
 
 public class InsuranceProductServiceImpl implements InsuranceProductService{
 	
-	private InsuranceProductListImpl insuranceProductListImpl;
+	private InsuranceProductList insuranceProductList;
 	
 	public InsuranceProductServiceImpl(){
-		this.insuranceProductListImpl = new InsuranceProductListImpl();
+		this.insuranceProductList = new InsuranceProductListImpl();
 	}
 
-	public ArrayList<InsuranceProduct> showAllList() {//true든 false든 다 보여주기
-		return insuranceProductListImpl.getInsuranceProductList();
+	public ArrayList<InsuranceProduct> showAllList() {
+		return insuranceProductList.getInsuranceProductList();
 	}
 	
-	public ArrayList<InsuranceProduct> showInsuranceProductIsApproval(){//true만 보여주기
-		return insuranceProductListImpl.searchListByApproval(true);
+	public ArrayList<InsuranceProduct> showInsuranceProductIsApproval(){
+		return insuranceProductList.searchListByApproval(true);
 	}
 	
-	public ArrayList<InsuranceProduct> showInsuranceProductIsNotApproval() {//false만 보여주기
-        return insuranceProductListImpl.searchListByApproval(false);
-    }
+	public ArrayList<InsuranceProduct> showInsuranceProductIsNotApproval() {
+		return insuranceProductList.searchListByApproval(false);
+	}
 
-	public void designInsuranceProduct(InsuranceProducts insuranceProducts) {
-		InsuranceProduct developedProduct = insuranceProducts.designInsurance().developInsurance();
-		System.out.println(insuranceProductListImpl.add(developedProduct)? 
-				"보험상품 생성이 완료되었습니다.":"보험상품 생성에 실패하였습니다.");
+	public boolean addInsuranceProduct(InsuranceProduct developedProduct) {
+		return insuranceProductList.add(developedProduct);
 	}
 	
-	public void add(InsuranceProduct developedProduct) {
-		System.out.println(insuranceProductListImpl.add(developedProduct)? 
-				"보험상품 생성이 완료되었습니다.":"보험상품 생성에 실패하였습니다.");
+	public InsuranceProductList getInsuranceProductList() {
+		return this.insuranceProductList;
 	}
 	
-	public InsuranceProductListImpl getInsuranceProductList() {
-		return this.insuranceProductListImpl;
-	}
 }

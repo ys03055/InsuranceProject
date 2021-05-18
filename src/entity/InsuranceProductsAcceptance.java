@@ -14,7 +14,5 @@ public class InsuranceProductsAcceptance extends Manager {
 		
 		return (InsuranceProductsAcceptance)super.clone();
 	}
-	private void emailSend() {
-		
-	}
+	
 }
