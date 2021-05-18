@@ -466,7 +466,8 @@ public class ConsoleController {
 			String id = sc.next();
 			System.out.println("--Password를 입력해주세요.--");
 			String pw = sc.next();
-			clientService.login(id, pw);
+			clientLogin = clientService.login(id, pw);
+			System.out.println(clientLogin.getAge());
 		}
 		if (clientLogin != null) {
 			clientWorkMenu();
