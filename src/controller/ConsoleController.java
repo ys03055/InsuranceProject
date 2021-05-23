@@ -1,5 +1,8 @@
 package controller;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Scanner;
@@ -25,6 +28,7 @@ import entity.InsuranceProductsAcceptance;
 import entity.Life;
 import entity.Manager;
 import entity.Pension;
+import list.ClientList;
 import service.ClientService;
 import service.ClientServiceImpl;
 import service.ContractService;
@@ -139,6 +143,15 @@ public class ConsoleController {
 		
 		System.out.println("[Password]");
 		manager.setPassword(sc.nextLine());
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println("current: " + df.format(cal.getTime()));
+        
+        cal.add(Calendar.YEAR, 10);
+        System.out.println("after: " + df.format(cal.getTime()));
 		
 		System.out.println(managerService.register(manager) ? "등록이 완료되었습니다." : "등록에 실패하였습니다.");
 	}
@@ -445,7 +458,7 @@ public class ConsoleController {
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress("hm5395@naver.com")); // 수신자
 			message.setSubject("Test"); // 메일 제목을 입력
 			message.setText("Test"); // 메일 내용을 입력
-			Transport.send(message); //// 전송
+			Transport.send(message); // 전송
 			System.out.println("Message sent successfully...!!");
 		} catch (AddressException e) {
 			e.printStackTrace();
@@ -621,29 +634,37 @@ public class ConsoleController {
 		}
 	}
 	
-	private void clientWorkMenu() {
+	private void clientWorkMenu() {//미완성
 		System.out.println("1.모든 보험 조회하기 2.가입한 보험 조회하기 3.로그아웃");
 		switch (sc.nextInt()) {
 		case 1:
-			insuranceMenu(insuranceProductService.showInsuranceProductIsApproval());
+			if(insuranceMenu(insuranceProductService.showInsuranceProductIsApproval()) == null) {
+				System.out.println("\n이전 페이지로 돌아갑니다.");
+				return;
+			}else
 			contractRegisterClient();
 		case 2:
-
+			signUpInsuranceProductMenu();
 		case 3:
 			clientLogin = null;
 			return;
 		}
 	}
 	
-	private void contractRegisterClient() {
-		System.out.println("1.가입하기 2.돌아가기");
-		sc.nextInt();
-		switch(sc.nextInt()) {
-		case 1://계약 리스트에 넣기
-			break;
-		case 2:
-			return;
+	private void contractRegisterClient() {//미완성
+			System.out.println("/n1.가입하기 2.돌아가기");
+			int a = sc.nextInt();
+			switch(a) {
+			case 1://계약 리스트에 넣기
+				
+				break;
+			case 2:
+				return;
+			}
 		}
+	
+	private void signUpInsuranceProductMenu() {//미완성
+		
 	}
 	
 	private void clientMenu() {// clientMenu
@@ -672,8 +693,14 @@ public class ConsoleController {
 	private void clientRegisterMenu() {
 		sc.nextLine();
 		Client client = new Client();
+		//clientService.checkClientID(client.getId()) == null
 		System.out.println("[ID]");
 		client.setId(sc.nextLine());
+		
+		if(clientService.checkClientID(client.getId()) !=null) {
+			System.out.println("이미 가입된 ID입니다. 다시 입력해주세요.");
+			client.setId(sc.nextLine());
+		}
 		System.out.println(client.getId());
 		System.out.println("비밀번호를 입력하세요");
 		client.setPassword(sc.nextLine());
@@ -761,7 +788,7 @@ public class ConsoleController {
 						+ insuranceProduct.getInsuranceProductType().getInsuranceName());
 				i++;
 			}
-				System.out.println("보험상품의 번호를 입력해주세요.");
+				System.out.println("\n보험상품의 번호를 입력해주세요.");
 				InsuranceProduct selectInsurance = insuranceProductList.get(sc.nextInt() - 1);
 				this.showInsuranceProductDetail(selectInsurance);
 				return selectInsurance;

@@ -10,6 +10,10 @@ public class ClientServiceImpl implements ClientService {
 	public ClientServiceImpl() {
 		this.clientList = new ClientListImpl();
 	}
+	
+	public Client checkClientID(String clientID) {
+		return clientList.search(clientID);
+	}
 
 	public void association() {
 	}
