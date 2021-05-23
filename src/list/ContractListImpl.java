@@ -1,48 +1,38 @@
 package list;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
+import entity.Client;
 import entity.Contract;
 
 public class ContractListImpl implements ContractList{
 	
-	private ArrayList<Contract> contractList;
+	Scanner sc = new Scanner(System.in);
+	ArrayList<Contract> contractList = new ArrayList<Contract>();
 	
-	public ContractListImpl() {
-		this.contractList = new ArrayList<Contract>();
-	}
-
+	
+	
 	@Override
 	public boolean add(Contract contract) {
-		return contractList.add(contract);
+		return this.contractList.add(contract);
 	}
 
 	@Override
 	public boolean delete(Contract contract) {
-		return contractList.remove(contract);
+		return this.contractList.remove(contract);
 	}
 
 	@Override
-	public Contract search(String clientID, String productName) {
-		for(Contract contract : contractList) {
-			if(clientID.equals(contract.getClientID()) && productName.equals(contract.getProductName()))
+	public Contract search(Contract contract) {
+		for (Contract clientId : contractList) {
+			if (clientId.equals(contract.ContractInsuranceProducts()))
 				return contract;
 		}
 		return null;
+
+
+
+
 	}
-	
-	@Override
-	public ArrayList<Contract> searchByClient(String clientID) {
-		ArrayList<Contract> returnList = new ArrayList<Contract>();
-		for(Contract contract : contractList) {
-			if(clientID.equals(contract.getClientID()))
-				returnList.add(contract);
-		}
-		return returnList;
-	}
-	
-	public ArrayList<Contract> getContractList(){
-		return this.contractList;
-	}
-	
 }
