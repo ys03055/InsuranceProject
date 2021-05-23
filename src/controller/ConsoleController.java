@@ -845,7 +845,7 @@ public class ConsoleController {
 	private void lifeInfo(InsuranceProduct insuranceProduct) {
 		Life life = (Life)insuranceProduct;
 		System.out.println("\n필수납입기간" + life.getRequiredPaymentPeriod()+ "\n보험금" + life.getInsuranceMoney());
-		System.out.println("\n보험상품의 번호를 입력해주세요.");
+		
 	}
 
 }
