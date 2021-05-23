@@ -89,5 +89,10 @@ public class InsuranceProduct implements Cloneable{
 		}
 		return null;
 	}
+	
+	public int getApproval() { //jdbc
+		return this.approval? 1 : 0;
+	}
+
 
 }

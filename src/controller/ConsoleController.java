@@ -22,6 +22,7 @@ import entity.Cancer;
 import entity.Client;
 import entity.CompensationHandle;
 import entity.Contract;
+import entity.ContractManagement;
 import entity.InsuranceProduct;
 import entity.InsuranceProducts;
 import entity.InsuranceProductsAcceptance;
@@ -146,13 +147,10 @@ public class ConsoleController {
 		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
-		
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         System.out.println("current: " + df.format(cal.getTime()));
-        
         cal.add(Calendar.YEAR, 10);
         System.out.println("after: " + df.format(cal.getTime()));
-		
 		System.out.println(managerService.register(manager) ? "등록이 완료되었습니다." : "등록에 실패하였습니다.");
 	}
 	
@@ -484,7 +482,21 @@ public class ConsoleController {
 	}
 
 	private void modifyInsuranceProduct(InsuranceProduct selectedInsuranceProduct) {
-		
+		switch(selectedInsuranceProduct.getInsuranceProductType()) {
+		case ACTUALEXPENSE:
+			this.developActualExpense(selectedInsuranceProduct);
+			break;
+		case CANCER:
+			this.developCancer(selectedInsuranceProduct);
+			break;
+		case PENSION:
+			this.developPension(selectedInsuranceProduct);
+			break;
+		case LIFE:
+			this.developLife(selectedInsuranceProduct);
+			break;
+		}
+
 	}
 
 	private void underWriterMenu() {//UW(UW)
@@ -553,10 +565,7 @@ public class ConsoleController {
 	
 	private void contractManagerMenu() {// CM(계약관리자)
 		// ContractManagement contractManagement = (ContractManagement)managerLogin;
-		while (true) {
-			System.out.println("\n---ContractManagementMenu---");
-			System.out.println("");
-		}
+		
 	}
 	
 	private void compensationHandleMenu() {// CH(보상처리자)

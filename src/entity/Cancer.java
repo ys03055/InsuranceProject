@@ -5,10 +5,9 @@ import type.CancerType;
 public class Cancer extends InsuranceProduct {
 
 	private String cancerList;
-	private String guaranteedType;
 	private int limitAge;
 	public CancerHistory m_CancerHistory;
-	private CancerType cancerType;
+	private CancerType guaranteedType;
 
 	public Cancer() {
 		//m_CancerHistory.getClientCancerCareer();
@@ -16,11 +15,16 @@ public class Cancer extends InsuranceProduct {
 	}
 
 	public CancerType getCancerType() {
-		return cancerType;
+		return guaranteedType;
 	}
 
-	public void setCancerType(CancerType cancerType) {
-		this.cancerType = cancerType;
+
+	public CancerType getGuaranteedType() {
+		return guaranteedType;
+	}
+
+	public void setGuaranteedType(CancerType guaranteedType) {
+		this.guaranteedType = guaranteedType;
 	}
 
 	public String getCancerList() {
@@ -29,14 +33,6 @@ public class Cancer extends InsuranceProduct {
 
 	public void setCancerList(String cancerList) {
 		this.cancerList = cancerList;
-	}
-
-	public String getGuaranteedType() {
-		return guaranteedType;
-	}
-
-	public void setGuaranteedType(String guaranteedType) {
-		this.guaranteedType = guaranteedType;
 	}
 
 	public int getLimitAge() {
