@@ -1,71 +1,55 @@
 package entity;
 
-import type.InsuranceProductType;
+import java.util.Date;
 
 public class Contract {
-	private String clientId;
-	private int insuranceContractDate;
-	private String insuranceExpiryDate;
-	private String nameOfSalesPerson;
-	private InsuranceProductType insuranceProductType;
-	private InsuranceProducts insuranceProducts;
 	
+	private String clientID;
+	private Date insuranceContractDate;
+	private Date insuranceExpiryDate;
+	private String productName;
+	private String NameOfSalesPerson;
+	private boolean approval;
 	
+	public Contract() {
+		this.approval = false;
+	}
 	
-	public String getClientId() {
-		return clientId;
+	public String getClientID() {
+		return clientID;
 	}
-	public void setClientId(String clientId) {
-		this.clientId = clientId;
+	public void setClientID(String clientID) {
+		this.clientID = clientID;
 	}
-	public String getInsuranceExpiryDate() {
-		return insuranceExpiryDate;
-	}
-	public void setInsuranceExpiryDate(String insuranceExpiryDate) {
-		this.insuranceExpiryDate = insuranceExpiryDate;
-	}
-	public String getNameOfSalesPerson() {
-		return nameOfSalesPerson;
-	}
-	public void setNameOfSalesPerson(String nameOfSalesPerson) {
-		this.nameOfSalesPerson = nameOfSalesPerson;
-	}
-	public int getInsuranceContractDate() {
+	public Date getInsuranceContractDate() {
 		return insuranceContractDate;
 	}
-	public void setInsuranceContractDate(int insuranceContractDate) {
+	public void setInsuranceContractDate(Date insuranceContractDate) {
 		this.insuranceContractDate = insuranceContractDate;
 	}
-	public InsuranceProducts getInsuranceProducts() {
-		return insuranceProducts;
+	public Date getInsuranceExpiryDate() {
+		return insuranceExpiryDate;
 	}
-	public void setInsuranceProducts(InsuranceProducts insuranceProducts) {
-		this.insuranceProducts = insuranceProducts;
+	public void setInsuranceExpiryDate(Date insuranceExpiryDate) {
+		this.insuranceExpiryDate = insuranceExpiryDate;
 	}
-	public InsuranceProductType getInsuranceProductType() {
-		return insuranceProductType;
+	public String getProductName() {
+		return productName;
+	}
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+	public String getNameOfSalesPerson() {
+		return NameOfSalesPerson;
+	}
+	public void setNameOfSalesPerson(String nameOfSalesPerson) {
+		NameOfSalesPerson = nameOfSalesPerson;
+	}
+	public boolean isApproval() {
+		return approval;
+	}
+	public void setApproval(boolean approval) {
+		this.approval = approval;
 	}
 
-	public void setInsuranceProductType(
-			InsuranceProductType insuranceProductType) {
-		this.insuranceProductType = insuranceProductType;
-	}
-
-	public void CancelInsuranceProducts(insuranceProduct[]) {
-		
-	}
-	public void ContractInsuranceProducts(getInsurance[]) {
-		
-	}
-	public void ProvideInsuranceProducts(insuranceProduct]) {
-		
-	}
-	public Contract clone() {
-		try {
-			return (Contract)super.clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 }

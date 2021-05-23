@@ -1,9 +1,8 @@
 package type;
-
 public enum CancerType {
-	PANCREATIC("ÃéÀå¾Ï", 1.6), LUNG("Æó¾Ï", 1.5), STOMACH("À§¾Ï", 1.4), 
-	COLORECTAL("´ëÀå¾Ï", 1.3), LIVER("°£¾Ï", 1.2), ETC("±âÅ¸", 1.1), 
-	HEALTHY("¾øÀ½", 1.0);
+	PANCREATIC("ì·Œì¥ì•”", 1.6), LUNG("íì•”", 1.5), STOMACH("ìœ„ì•”", 1.4), 
+	COLORECTAL("ëŒ€ì¥ì•”", 1.3), LIVER("ê°„ì•”", 1.2), ETC("ê¸°íƒ€", 1.1), 
+	HEALTHY("ì—†ìŒ", 1.0);
 	
 	private String cancerName;
 	private double rate;
@@ -12,13 +11,10 @@ public enum CancerType {
 		this.cancerName = cancerName;
 		this.rate = rate;
 	}
-	
 	public String getCancerName() {
 		return cancerName;
 	}
-	
 	public double getRate() {
 		return rate;
 	}
-	
 }

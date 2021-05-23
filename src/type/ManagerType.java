@@ -1,12 +1,9 @@
 package type;
-
 import entity.*;
-
 public enum ManagerType {
-
-	IP("º¸Çè»óÇ°°³¹ßÀÚ", new InsuranceProducts()), IPA("º¸Çè»óÇ°½ÂÀÎÀÚ", new InsuranceProductsAcceptance()), 
-	UW("U/W", new UW()), CM("°è¾à°ü¸®ÀÚ", new ContractManagement()), 
-	CH("º¸»óÃ³¸®ÀÚ", new CompensationHandle()), SP("¿µ¾÷»ç¿ø", new SalesPerson());
+	IP("ë³´í—˜ìƒí’ˆê°œë°œì", new InsuranceProducts()), IPA("ë³´í—˜ìƒí’ˆìŠ¹ì¸ì", new InsuranceProductsAcceptance()), 
+	UW("U/W", new UW()), CM("ê³„ì•½ê´€ë¦¬ì", new ContractManagement()), 
+	CH("ë³´ìƒì²˜ë¦¬ì", new CompensationHandle()), SP("ì˜ì—…ì‚¬ì›", new SalesPerson());
 
 	private String job;
 	private Manager manager;
@@ -15,13 +12,10 @@ public enum ManagerType {
 		this.job = job;
 		this.manager = manager;
 	}
-
 	public String getJob() {
 		return job;
 	}
-	
 	public Manager getManager() {
 		return this.manager;
 	}
-	
 }
