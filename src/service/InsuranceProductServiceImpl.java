@@ -2,35 +2,29 @@ package service;
 import java.util.ArrayList;
 
 import entity.InsuranceProduct;
-import list.InsuranceProductList;
+import entity.InsuranceProducts;
 import list.InsuranceProductListImpl;
 
 public class InsuranceProductServiceImpl implements InsuranceProductService{
 	
-	private InsuranceProductList insuranceProductList;
+	private InsuranceProductListImpl insuranceProductListImpl;
 	
 	public InsuranceProductServiceImpl(){
-		this.insuranceProductList = new InsuranceProductListImpl();
+		this.insuranceProductListImpl = new InsuranceProductListImpl();
 	}
 
 	public ArrayList<InsuranceProduct> showAllList() {
-		return insuranceProductList.getInsuranceProductList();
-	}
-	
-	public ArrayList<InsuranceProduct> showInsuranceProductIsApproval(){
-		return insuranceProductList.searchListByApproval(true);
-	}
-	
-	public ArrayList<InsuranceProduct> showInsuranceProductIsNotApproval() {
-		return insuranceProductList.searchListByApproval(false);
+		return insuranceProductListImpl.getInsuranceProductList();
 	}
 
-	public boolean addInsuranceProduct(InsuranceProduct developedProduct) {
-		return insuranceProductList.add(developedProduct);
+	public void designInsuranceProduct(InsuranceProducts insuranceProducts) {
+		InsuranceProduct developedProduct = insuranceProducts.designInsurance().developInsurance();
+		System.out.println(insuranceProductListImpl.add(developedProduct)? 
+				"보험상품 생성이 완료되었습니다.":"보험상품 생성에 실패하였습니다.");
 	}
 	
-	public InsuranceProductList getInsuranceProductList() {
-		return this.insuranceProductList;
+	public void add(InsuranceProduct developedProduct) {
+		System.out.println(insuranceProductListImpl.add(developedProduct)? 
+				"보험상품 생성이 완료되었습니다.":"보험상품 생성에 실패하였습니다.");
 	}
-	
 }

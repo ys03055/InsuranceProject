@@ -1,12 +1,14 @@
 package entity;
 
-import type.CancerType;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Cancer extends InsuranceProduct {
 
 	private String cancerList;
 	private int limitAge;
 	public CancerHistory m_CancerHistory;
+<<<<<<< HEAD
 	private CancerType guaranteedType;
 
 	public Cancer() {
@@ -25,6 +27,11 @@ public class Cancer extends InsuranceProduct {
 
 	public void setGuaranteedType(CancerType guaranteedType) {
 		this.guaranteedType = guaranteedType;
+=======
+
+	public Cancer() {
+
+>>>>>>> 0256c1c125ff4c463f1198edcc973869bcb36a1c
 	}
 
 	public String getCancerList() {
@@ -61,5 +68,27 @@ public class Cancer extends InsuranceProduct {
 		double familyCancerCareerRate = client.getMedicalHistory().getFamilyCancerCareer().getRate();
 		return clientCancerCareerRate*familyCancerCareerRate*basicInsurancePremium;
 	}
+
+	public void setClidnetId(String nextLine) {
+		
+	}
+
+	public void setInsuranceContractDate(String nextLine) {
+		DateTimeFormatter dob_format=DateTimeFormatter.ofPattern("dd-MM-uuuu");
+		LocalDate dob = LocalDate.parse(nextLine,dob_format);
+		System.out.println(dob);
+	}
+
+	public void setInsuranceExpiryDate(String nextLine) {
+		DateTimeFormatter dob_format=DateTimeFormatter.ofPattern("dd-MM-uuuu");
+		LocalDate dob = LocalDate.parse(nextLine,dob_format);
+		System.out.println(dob);
+	}
+
+	public void setNameOfSalesPerson(String nextLine) {
+		
+	}
+
+
 
 }
