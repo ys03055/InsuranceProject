@@ -670,8 +670,8 @@ public class ConsoleController {
 		}
 	}
 	
-	private void clientWorkMenu() {//미완성
-		System.out.println("1.모든 보험 조회하기 2.가입한 보험 조회하기 3.로그아웃");
+	private void clientWorkMenu() {//미완성 //사고 접수 하기 추가(21.05.25)
+		System.out.println("1.모든 보험 조회하기 2.가입한 보험 조회하기 3.사고접수하기 4.로그아웃");
 		switch (sc.nextInt()) {
 		case 1:
 			if(insuranceMenu(insuranceProductService.showInsuranceProductIsApproval()) == null) {
@@ -682,13 +682,15 @@ public class ConsoleController {
 		case 2:
 			signUpInsuranceProductMenu();
 		case 3:
+			registerAccident();
+		case 4:
 			clientLogin = null;
 			return;
 		}
 	}
 	
 	private void contractRegisterClient() {//미완성
-			System.out.println("/n1.가입하기 2.돌아가기");
+			System.out.println("\n1.가입하기 2.돌아가기");
 			int a = sc.nextInt();
 			switch(a) {
 			case 1://계약 리스트에 넣기
@@ -701,6 +703,70 @@ public class ConsoleController {
 	
 	private void signUpInsuranceProductMenu() {//미완성
 		
+	}
+	
+	private InsuranceProduct registerAccidentInsurance(InsuranceProduct registerAccidentInsuranceProduct) {//사고접수하기 관련 메소드 미완성(21.05.25)
+		switch(registerAccidentInsuranceProduct.getInsuranceProductType()) {
+		case ACTUALEXPENSE:
+			return registerActualExpense(registerAccidentInsuranceProduct);
+		case CANCER:
+			return registerCancer(registerAccidentInsuranceProduct);
+		case PENSION:
+			return registerPension(registerAccidentInsuranceProduct);
+		case LIFE:
+			return registerLife(registerAccidentInsuranceProduct);
+		default:
+			return registerAccidentInsuranceProduct;
+		}
+	}
+
+	//private Cancer developCancer(InsuranceProduct insuranceProduct) {//sysout 글 수정 (21.05.24)
+		//Cancer cancer = (Cancer)insuranceProduct;
+		
+	private InsuranceProduct registerLife(InsuranceProduct registerAccidentInsuranceProduct) {//사고접수하기 관련 메소드 미완성(21.05.25)
+		System.out.println("어떤 보험에 대해 사고접수를 신청하시겠습니까?");
+		return registerAccidentInsuranceProduct;
+	}
+
+	private InsuranceProduct registerPension(InsuranceProduct registerAccidentInsuranceProduct) {//사고접수하기 관련 메소드 미완성(21.05.25)
+		System.out.println("어떤 보험에 대해 사고접수를 신청하시겠습니까?");
+		return registerAccidentInsuranceProduct;
+	}
+
+	private InsuranceProduct registerCancer(InsuranceProduct registerAccidentInsuranceProduct) {//사고접수하기 관련 메소드 미완성(21.05.25)
+		System.out.println("어떤 보험에 대해 사고접수를 신청하시겠습니까?");
+		return registerAccidentInsuranceProduct;
+	}
+
+	private ActualExpense registerActualExpense(InsuranceProduct registerAccidentInsuranceProduct) {//사고접수하기 관련 메소드 미완성(21.05.25)
+		ActualExpense accident = (ActualExpense) registerAccidentInsuranceProduct;
+		return null;
+		
+	}
+
+	private InsuranceProduct registerAccident() {//사고접수하기 관련 메소드 미완성(21.05.25)
+		System.out.println("어떤 보험에 대해 사고접수를 신청하시겠습니까?");
+		System.out.println("1.실비보험");
+		System.out.println("2.암보험");
+		System.out.println("3.연금보험");
+		System.out.println("4.종신보험");
+		while (true) {
+			try {
+				int input = sc.nextInt();
+				sc.nextLine();
+				if (input <= 4) {
+					InsuranceProduct registerAccidentInsuranceProduct = InsuranceProductType.values()[input - 1]
+							.getInsuranceProduct().clone();
+					registerAccidentInsuranceProduct.setInsuranceProductType(InsuranceProductType.values()[input - 1]);
+					return registerAccidentInsuranceProduct;
+				} else {
+					System.out.println("항목을 제대로 선택해주세요.");
+				}
+			} catch (InputMismatchException e) {
+				sc.next();
+				System.out.println("숫자를 입력해주세요.");
+			}
+		}
 	}
 	
 	private void clientMenu() {// clientMenu
