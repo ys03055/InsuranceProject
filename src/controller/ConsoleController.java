@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -142,6 +143,11 @@ public class ConsoleController {
 		System.out.println("[ID]");
 		manager.setId(sc.nextLine());
 		
+		if(managerService.checkManagerID(manager.getId()) != null) {//중복된 아이디 체크 (21.05.24)
+			System.out.println("이미 가입된 ID입니다. 다시 입력해주세요.");
+			manager.setId(sc.nextLine());
+		}
+		
 		System.out.println("[Password]");
 		manager.setPassword(sc.nextLine());
 		
@@ -167,10 +173,11 @@ public class ConsoleController {
 		if (managerLogin != null)
 			managerWorkMenu();
 		else
-			System.out.println("등록되지 않은 매니저입니다.");	
+			System.out.println("입력한 정보를 확인해주세요.");	
 	}
 
 	private void managerDeleteMenu() {
+		sc.nextLine();//21.05.24 ID/PW 붙어서 나오는거 sc.nextLine()추가
 		System.out.println("[ID]");
 		String id = sc.nextLine();
 		System.out.println("[Password]");
@@ -239,38 +246,50 @@ public class ConsoleController {
 		}
 	}
 	
-	private InsuranceProduct designInsurance() {
-		System.out.println("개발할 보험을 선택해주세요.");
+	private InsuranceProduct designInsurance() {//try catch문을 써서 5이상의 값과 문자를 넣을 경우 예외처리 (21.05.24)
+		System.out.println("\n개발할 보험을 선택해주세요.");
 		System.out.println("1.실비보험");
 		System.out.println("2.암보험");
 		System.out.println("3.연금보험");
 		System.out.println("4.종신보험");
-		int input = sc.nextInt();
-		sc.nextLine();
-		InsuranceProduct developInsuranceProduct = InsuranceProductType.values()[input-1].getInsuranceProduct().clone();
-		developInsuranceProduct.setInsuranceProductType(InsuranceProductType.values()[input-1]);
-		return developInsuranceProduct;
+		while (true) {
+			try {
+				int input = sc.nextInt();
+				sc.nextLine();
+				if (input <= 4) {
+					InsuranceProduct developInsuranceProduct = InsuranceProductType.values()[input - 1]
+							.getInsuranceProduct().clone();
+					developInsuranceProduct.setInsuranceProductType(InsuranceProductType.values()[input - 1]);
+					return developInsuranceProduct;
+				} else {
+					System.out.println("항목을 제대로 선택해주세요.");
+				}
+			} catch (InputMismatchException e) {
+				sc.next();
+				System.out.println("숫자를 입력해주세요.");
+			}
+		}
 	}
 	
-	private ActualExpense developActualExpense(InsuranceProduct insuranceProduct) {
+	private ActualExpense developActualExpense(InsuranceProduct insuranceProduct) {//sysout 글 수정 (21.05.24)
 		ActualExpense actualExpense = (ActualExpense)insuranceProduct;
 		System.out.println("--실비보험을 개발합니다.--");
-		System.out.println("\n상품명을 입력해주세요.");
+		System.out.println("\n상품명을 입력해주세요.");	
 		actualExpense.setProductName(sc.nextLine());
 		
-		System.out.println("기본보험료를 입력하세요.");
+		System.out.println("기본보험료를 입력하세요. (단위: ?원)");
 		actualExpense.setBasicInsurancePremium(sc.nextInt());
 		
-		System.out.println("납입기간을 입력해주세요.(단위: 년)");
+		System.out.println("납입기간을 입력해주세요. (단위: ?년)");
 		actualExpense.setPaymentPeriod(sc.nextInt());
 		
-		System.out.println("납입주기를 입력해주세요.(단위: 매월 일)");
+		System.out.println("납입주기를 입력해주세요. (단위: 매월 ?일)");
 		actualExpense.setPaymentCycle(sc.nextInt());
 		
-		System.out.println("제한나이를 입력해주세요. (단위: 만 세)");
+		System.out.println("제한나이를 입력해주세요. (단위: ?세)");
 		actualExpense.setLimitAge(sc.nextInt());
 		
-		System.out.println("자기부담금 비율을 입력해주세요.(단위: %)");
+		System.out.println("자기부담금 비율을 입력해주세요. (단위: %)");
 		actualExpense.setSelfPayment(sc.nextInt());
 		
 		//actualExpense.getM_ActualExpenseHistory().setNumberOfHospitalizations(sc.nextInt());
@@ -281,28 +300,28 @@ public class ConsoleController {
 		ActualExpenseType.values()[input-1].getactualexpensename();
 		System.out.println(ActualExpenseType.values()[input-1].getactualexpensename());
 		
-		System.out.println("\n보장금액을 설정해주세요. (최대 ?원)");
+		System.out.println("\n보장금액을 설정해주세요. (단위: 최대 ?원)");
 		actualExpense.setLimitOfIndemnity(sc.nextInt());
 		
 		return actualExpense;
 	}
 	
-	private Cancer developCancer(InsuranceProduct insuranceProduct) {
+	private Cancer developCancer(InsuranceProduct insuranceProduct) {//sysout 글 수정 (21.05.24)
 		Cancer cancer = (Cancer)insuranceProduct;
 		System.out.println("--암보험을 개발합니다.--");
 		System.out.println("\n상품명을 입력해주세요.");
 		cancer.setProductName(sc.nextLine());
 		
-		System.out.println("기본보험료를 입력하세요.");
+		System.out.println("기본보험료를 입력하세요. (단위: ?원)");
 		cancer.setBasicInsurancePremium(sc.nextInt());
 		
-		System.out.println("납입기간을 입력해주세요.(단위: 년)");
+		System.out.println("납입기간을 입력해주세요. (단위: ?년)");
 		cancer.setPaymentPeriod(sc.nextInt());
 		
-		System.out.println("납입주기를 입력해주세요.(단위: 매월 일)");
+		System.out.println("납입주기를 입력해주세요. (단위: 매월 ?일)");
 		cancer.setPaymentCycle(sc.nextInt());
 		
-		System.out.println("제한나이를 입력해주세요. (단위: 만 세)");
+		System.out.println("제한나이를 입력해주세요. (단위: ?세)");
 		cancer.setLimitAge(sc.nextInt());
 		
 		System.out.println("보장내역(보험요율)을 설정해주세요.");
@@ -312,54 +331,54 @@ public class ConsoleController {
 		double rate = CancerType.values()[input-1].getRate();
 		System.out.println(CancerType.values()[input-1].getCancerName() + " " + rate);
 		
-		System.out.println("보험금을 설정해주세요. (최대 ?원)");
+		System.out.println("보험금을 설정해주세요. (단위: 최대 ?원)");
 		cancer.setInsuranceMoney(sc.nextInt());
 		return cancer;
 	}
 	
-	private Pension developPension(InsuranceProduct insuranceProduct) {
+	private Pension developPension(InsuranceProduct insuranceProduct) {//sysout 글 수정 (21.05.24)
 		Pension pension = (Pension)insuranceProduct;
 		System.out.println("--연금보험을 개발합니다.--");
 		System.out.println("상품명을 입력해주세요.");
 		pension.setProductName(sc.nextLine());
 		
-		System.out.println("기본보험료를 입력해주세요.(단위: 원)");
+		System.out.println("기본보험료를 입력해주세요. (단위: ?원)");
 		pension.setBasicInsurancePremium(sc.nextInt());	
 		
-		System.out.println("납입기간을 입력해주세요.(단위: 년)");
+		System.out.println("납입기간을 입력해주세요. (단위: ?년)");
 		pension.setPaymentPeriod(sc.nextInt());
 		
-		System.out.println("납입주기를 입력해주세요.(단위: 매월 x일)");
+		System.out.println("납입주기를 입력해주세요. (단위: 매월 ?일)");
 		pension.setPaymentCycle(sc.nextInt());
 		
-		System.out.println("보장기간 입력해주세요. (단위: 만 나이)");
+		System.out.println("보장기간 입력해주세요. (단위: ?세)");
 		pension.setGuaranteedPeriod(sc.nextInt());
 		
-		System.out.println("보험금을 입력해주세요. (단위: 매월 x원)");
+		System.out.println("보험금을 설정해주세요. (단위: ?원)");
 		pension.setInsuranceMoney(sc.nextInt());
 		
 		return pension;
 	}
 	
-	private Life developLife(InsuranceProduct insuranceProduct) {
+	private Life developLife(InsuranceProduct insuranceProduct) {//sysout 글 수정 (21.05.24)
 		Life life = (Life)insuranceProduct;
 		System.out.println("--종신보험을 개발합니다.--");
 		System.out.println("상품명을 입력해주세요.");
 		life.setProductName(sc.nextLine());
 		
-		System.out.println("기본보험료를 입력해주세요. (단위: 원)");
+		System.out.println("기본보험료를 입력해주세요. (단위: ?원)");
 		life.setBasicInsurancePremium(sc.nextInt());
 		
-		System.out.println("납입기간을 입력해주세요.(단위: 년)");
+		System.out.println("납입기간을 입력해주세요. (단위: ?년)");
 		life.setPaymentPeriod(sc.nextInt());
 		
-		System.out.println("필수납입기간을 입력해주세요.(단위: 매월 일)");
-		life.setRequiredPaymentPeriod(sc.nextInt());
-		
-		System.out.println("납입주기 입력해주세요. (단위: 만 나이)");
+		System.out.println("납입주기 입력해주세요. (단위: 매월 ?일)");
 		life.setPaymentCycle(sc.nextInt());
 		
-		System.out.println("보험금을 입력해주세요. (단위: 매월 원)");
+		System.out.println("필수납입기간을 입력해주세요. (단위: 매월 ?일)");
+		life.setRequiredPaymentPeriod(sc.nextInt());
+		
+		System.out.println("보험금을 설정해주세요. (단위: ?원)");
 		life.setInsuranceMoney(sc.nextInt());
 		
 		return life;
@@ -434,10 +453,19 @@ public class ConsoleController {
 		}
 	}
 	
-	private void emailSend() {//이메일 보내기 (21.05.18)
-		String user = ""; // gmail계정
-		String password = ""; // 패스워드
-
+	private void emailSend() {//이메일 보내기 (21.05.18) + 발신자, 수신자, 내용 입력 할 수 있게 수정 (21.05.24)
+		System.out.println("보험상품승인자의 이메일을 입력해주세요.(gmail을 입력해주세요.)");
+		String user = sc.next(); // gmail계정
+		System.out.println("보험상품승인자의 이메일 Password를 입력해주세요.");
+		String password = sc.next(); // 패스워드
+		System.out.println("금융감독원 이메일을 입력해주세요.");
+		String fssEmail = sc.next();
+		System.out.println("메일 제목을 입력해주세요.");
+		String mailTitle = sc.next();
+		System.out.println("메일 내용을 입력해주세요.");
+		String mailContent = sc.next();
+		System.out.println("메일을 보내는 중입니다. 잠시만 기다려주세요...");
+		
 		Properties prop = new Properties();
 		prop.put("mail.smtp.host", "smtp.gmail.com");
 		prop.put("mail.smtp.port", 465);
@@ -453,9 +481,9 @@ public class ConsoleController {
 		try {
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(user));
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress("hm5395@naver.com")); // 수신자
-			message.setSubject("Test"); // 메일 제목을 입력
-			message.setText("Test"); // 메일 내용을 입력
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(fssEmail)); // 수신자
+			message.setSubject(mailTitle); // 메일 제목을 입력
+			message.setText(mailContent); // 메일 내용을 입력
 			Transport.send(message); // 전송
 			System.out.println("Message sent successfully...!!");
 		} catch (AddressException e) {
@@ -468,7 +496,7 @@ public class ConsoleController {
 	private void followUpInsurance() {//사후관리
 		System.out.println("보험목록에서 사후관리할 보험을 선택해주세요.");
 		InsuranceProduct selectedInsuranceProduct = this.insuranceMenu(insuranceProductService.showInsuranceProductIsApproval());
-		System.out.println("해당 보험을 수정하시겠습니까? 1.수정하기, 2.뒤로가기");
+		System.out.println("\n해당 보험을 수정하시겠습니까? \n1.수정하기 2.뒤로가기");
 		int input = sc.nextInt();
 		sc.nextLine();
 		switch(input) {

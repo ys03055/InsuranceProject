@@ -10,6 +10,10 @@ public class ManagerServiceImpl implements ManagerService{
 		this.managerList = new ManagerListImpl();
 	}
 	
+	public Manager checkManagerID(String managerID) {
+		return managerList.search(managerID);
+	}
+	
 	public void association() {
 		
 	}
