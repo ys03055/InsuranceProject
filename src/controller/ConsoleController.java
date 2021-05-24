@@ -23,14 +23,12 @@ import entity.Cancer;
 import entity.Client;
 import entity.CompensationHandle;
 import entity.Contract;
-import entity.ContractManagement;
 import entity.InsuranceProduct;
 import entity.InsuranceProducts;
 import entity.InsuranceProductsAcceptance;
 import entity.Life;
 import entity.Manager;
 import entity.Pension;
-import list.ClientList;
 import service.ClientService;
 import service.ClientServiceImpl;
 import service.ContractService;
@@ -472,7 +470,7 @@ public class ConsoleController {
 		prop.put("mail.smtp.auth", "true");
 		prop.put("mail.smtp.ssl.enable", "true");
 		prop.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-
+		
 		Session session = Session.getDefaultInstance(prop, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
 				return new PasswordAuthentication(user, password);
