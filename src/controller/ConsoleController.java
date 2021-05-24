@@ -460,9 +460,9 @@ public class ConsoleController {
 		String fssEmail = sc.next();
 		System.out.println("메일 제목을 입력해주세요.");
 		sc.nextLine();
-		String mailTitle = sc.next();
+		String mailTitle = sc.nextLine();
 		System.out.println("메일 내용을 입력해주세요.");
-		String mailContent = sc.next();
+		String mailContent = sc.nextLine();
 		System.out.println("메일을 보내는 중입니다. 잠시만 기다려주세요...!");
 		
 		Properties prop = new Properties();
