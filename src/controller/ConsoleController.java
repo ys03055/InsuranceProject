@@ -175,7 +175,7 @@ public class ConsoleController {
 	}
 
 	private void managerDeleteMenu() {
-		sc.nextLine();//21.05.24 ID/PW 붙어서 나오는거 sc.nextLine()추가
+		sc.nextLine();//ID/PW 붙어서 나오는거 sc.nextLine()추가 (21.05.24)
 		System.out.println("[ID]");
 		String id = sc.nextLine();
 		System.out.println("[Password]");
@@ -459,10 +459,11 @@ public class ConsoleController {
 		System.out.println("금융감독원 이메일을 입력해주세요.");
 		String fssEmail = sc.next();
 		System.out.println("메일 제목을 입력해주세요.");
+		sc.nextLine();
 		String mailTitle = sc.next();
 		System.out.println("메일 내용을 입력해주세요.");
 		String mailContent = sc.next();
-		System.out.println("메일을 보내는 중입니다. 잠시만 기다려주세요...");
+		System.out.println("메일을 보내는 중입니다. 잠시만 기다려주세요...!");
 		
 		Properties prop = new Properties();
 		prop.put("mail.smtp.host", "smtp.gmail.com");
