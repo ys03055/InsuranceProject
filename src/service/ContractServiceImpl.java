@@ -67,7 +67,7 @@ public class ContractServiceImpl implements ContractService {
 		return accidentList.getAccidentList();
 	}
 	
-	public boolean registerInsuracneProduct (Contract contract) {
+	public boolean registerInsuranceProduct (Contract contract) {
 		return contractList.add(contract);
 	}
 	

@@ -11,8 +11,8 @@ public class ActualExpense extends InsuranceProduct{
 	private ActualExpenseHistory m_ActualExpenseHistory;
 
 	public ActualExpense() {
-		//m_ActualExpenseHistory.getNumberOfHospitalizations();
-		//m_ActualExpenseHistory.getNumberOfHospitalVisits();
+		m_ActualExpenseHistory.getNumberOfHospitalizations();
+		m_ActualExpenseHistory.getNumberOfHospitalVisits();
 	}
 	public ActualExpenseType getActualExpenseType() {
 		return actualExpenseType;

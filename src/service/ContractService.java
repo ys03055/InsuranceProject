@@ -11,6 +11,6 @@ public interface ContractService {
 	public ArrayList<Contract> selectByInsuranceProductType (InsuranceProductType insuranceProductType);
 	public ArrayList<Contract> selectByExpiredDate (InsuranceProductType insuranceProductType);
 	public boolean deleteExpiredContract (Contract contract);
-	public boolean registerInsuracneProduct (Contract contract);
+	public boolean registerInsuranceProduct (Contract contract);
 	public ArrayList<Contract> searchBySalesPerson (String salesPerson);
 }

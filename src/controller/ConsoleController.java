@@ -755,7 +755,7 @@ public class ConsoleController {
 		}
 	}
 	
-	private void salesPersonMenu() {// SP(영업사원)
+	private void salesPersonMenu() {// SP(영업사원)//EA바뀜
 		while (true) {
 			System.out.println("\n---salesPersonMenu---");
 			System.out.println("1.영업 활동 관리");
@@ -788,39 +788,67 @@ public class ConsoleController {
 		System.out.println("\n---해당 보험을 가입하시겠습니까?---");
 		System.out.println("1.네 2.아니요");
 		switch(sc.nextInt()) {
-		case 1:
-			this.contractClientInsuranceProduct();//clientWorkMenu로 가는 문제때문에 새로운 메소드 생성 (21.05.26)
-			Contract contract = new Contract();
-			contract.setClient(clientLogin);
-			contract.setInsuranceProduct(selectInsuranceProduct);
-			contract.setInsuranceContractDate(new Date());
-			contract.setInsuranceExpiryDate(selectInsuranceProduct.getPaymentPeriod());
-			contract.setSalesPerson((SalesPerson)managerLogin);
-			contractService.registerInsuracneProduct(contract);
+		case 1://clientWorkMenu로 가는 문제때문에 새로운 메소드 생성 (21.05.26)
+			if (clientLogin == null) {sc.nextLine();
+			System.out.println("--고객의 ID를 입력해주세요.--");
+			String id = sc.nextLine();
+			System.out.println("--고객의 PassWord를 입력해주세요.--");
+			String pw = sc.nextLine();
+			clientLogin = clientService.login(id, pw);
+		}
+		if (clientLogin != null) {
+			clientContractMenu(insuranceProduct);
+		} else
+			System.out.println("입력하신 정보를 확인해주세요.");
 			clientLogin = null;
 		case 2:
 			return;
 		}
 	}
 	
-	private void contractClientInsuranceProduct() {
-		if (clientLogin == null) {sc.nextLine();
-		System.out.println("--고객의 ID를 입력해주세요.--");
-		String id = sc.nextLine();
-		System.out.println("--고객의 PassWord를 입력해주세요.--");
-		String pw = sc.nextLine();
-		clientLogin = clientService.login(id, pw);
-	}
-	if (clientLogin != null) {
-		clientContractMenu();
-	} else
-		System.out.println("입력하신 정보를 확인해주세요.");
+	private void clientContractMenu(InsuranceProduct selectInsuranceProduct) {//미완성
+		switch(selectInsuranceProduct.getInsuranceProductType()) {//보험 타입마다 다른 계약내용구현
+		case ACTUALEXPENSE:
+			contractActualExpense(selectInsuranceProduct);
+		case CANCER:
+			contractCancer(selectInsuranceProduct);
+		case PENSION:
+			contractPension(selectInsuranceProduct);
+		case LIFE:
+			contractLife(selectInsuranceProduct);
+		default:
+			return;
+		}
 	}
 	
-	private void clientContractMenu() {
+	private void contractActualExpense(InsuranceProduct selectInsuranceProduct) {
+		contractAllInsuranceProduct(selectInsuranceProduct);
 		
 	}
 	
+	private void contractCancer(InsuranceProduct selectInsuranceProduct) {
+		contractAllInsuranceProduct(selectInsuranceProduct);
+	}
+
+	private void contractPension(InsuranceProduct selectInsuranceProduct) {
+		contractAllInsuranceProduct(selectInsuranceProduct);
+	}
+	
+	private void contractLife(InsuranceProduct selectInsuranceProduct) {
+		contractAllInsuranceProduct(selectInsuranceProduct);
+	}
+	
+	private void contractAllInsuranceProduct(InsuranceProduct selectInsuranceProduct) {
+		Contract contract = new Contract();
+		contract.setClient(clientLogin);
+		clientLogin.getMedicalHistory().setClientCancerCareer();
+		contract.setInsuranceProduct(selectInsuranceProduct);
+		contract.setInsuranceContractDate(new Date());
+		contract.setInsuranceExpiryDate(selectInsuranceProduct.getPaymentPeriod());
+		contract.setSalesPerson((SalesPerson)managerLogin);
+		contractService.registerInsuranceProduct(contract);
+	}
+
 	private void clientWorkMenu() {//미완성 //사고 접수 하기 추가(21.05.25)
 		System.out.println("1.모든 보험 조회하기 2.가입한 보험 조회하기 3.사고접수 4.로그아웃");
 		switch (sc.nextInt()) {
@@ -829,7 +857,7 @@ public class ConsoleController {
 				System.out.println("\n이전 페이지로 돌아갑니다.");
 				return;
 			}else
-			contractRegisterClient();
+			contractRegisterClient();//수정해야함
 		case 2:
 			signUpInsuranceProductMenu();
 		case 3:
@@ -894,15 +922,14 @@ public class ConsoleController {
 		
 	}
 	
-	private void applyAccidentReception() {
-		
+	private void applyAccidentReception() {//미완성
 		// 가입한 보험목록 보여주기
 		// 스캐너로 번호 입력
 		// 제목 내용 입력 후 1.등록 2.돌아가기
 		// 등록하면
 	}
 	
-	private void checkApplyAccidentReception() {
+	private void checkApplyAccidentReception() {//미완성
 		//신청한 사고접수 목록
 		//번호 입력
 		//수정 삭제
@@ -975,7 +1002,6 @@ public class ConsoleController {
 		client.setResidentRegistrationNumber(sc.nextLine());
 		System.out.println("계좌번호를 입력하세요.");
 		client.setBankAccountNumber(sc.nextLine());*/
-		
 		System.out.println(clientService.register(client) ? "회원가입이 완료되었습니다." : "회원가입에 실패했습니다.");
 	}
 

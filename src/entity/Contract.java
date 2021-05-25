@@ -13,28 +13,34 @@ public class Contract {
 	public Contract() {
 		this.approval = false;
 	}
-	
+
+	public void setInsuranceExpiryDate(Date insuranceExpiryDate) {
+		this.insuranceExpiryDate = insuranceExpiryDate;
+	}
 	
 	public Date getInsuranceContractDate() {
 		return insuranceContractDate;
 	}
+	
 	public void setInsuranceContractDate(Date insuranceContractDate) {
 		this.insuranceContractDate = insuranceContractDate;
 	}
+	
 	public Date getInsuranceExpiryDate() {
 		return insuranceExpiryDate;
 	}
+	
 	public void setInsuranceExpiryDate(int paymentPeriod) {
 		Calendar ca = Calendar.getInstance();
 		ca.setTime(this.insuranceContractDate);
 		ca.add(Calendar.YEAR, paymentPeriod);
-		this.insuranceExpiryDate = ca.getTime()  ;
+		this.insuranceExpiryDate = ca.getTime();
 	}
 	
-
 	public boolean isApproval() {
 		return approval;
 	}
+	
 	public void setApproval(boolean approval) {
 		this.approval = approval;
 	}
@@ -63,12 +69,7 @@ public class Contract {
 		this.client = client;
 	}
 
-
 	public String Id() {
-		// TODO Auto-generated method stub
 		return client.getId();
 	}
-
-
-
 }
