@@ -784,7 +784,7 @@ public class ConsoleController {
 		}
 	}
 	
-	private void registeInsuranceProduct(InsuranceProduct selectInsuranceProduct) {
+	private void registeInsuranceProduct(InsuranceProduct selectInsuranceProduct) {//미완성
 		System.out.println("\n---해당 보험을 가입하시겠습니까?---");
 		System.out.println("1.네 2.아니요");
 		switch(sc.nextInt()) {
@@ -821,32 +821,50 @@ public class ConsoleController {
 		}
 	}
 	
-	private void contractActualExpense(InsuranceProduct selectInsuranceProduct) {
-		contractAllInsuranceProduct(selectInsuranceProduct);
-		
-	}
-	
-	private void contractCancer(InsuranceProduct selectInsuranceProduct) {
-		contractAllInsuranceProduct(selectInsuranceProduct);
-	}
-
-	private void contractPension(InsuranceProduct selectInsuranceProduct) {
-		contractAllInsuranceProduct(selectInsuranceProduct);
-	}
-	
-	private void contractLife(InsuranceProduct selectInsuranceProduct) {
-		contractAllInsuranceProduct(selectInsuranceProduct);
-	}
-	
-	private void contractAllInsuranceProduct(InsuranceProduct selectInsuranceProduct) {
+	private void contractActualExpense(InsuranceProduct selectInsuranceProduct) {//미완성
 		Contract contract = new Contract();
+		System.out.println("입원 횟수를 입력해주세요.");//입원 횟수에 대한 보험요율정하기.
+		clientLogin.getMedicalHistory().setNumberOfHospitalizations(sc.nextInt());
+		System.out.println("병원방문 횟수를 입력해주세요.");//병원방문 횟수에 대한 보험요율정하기.
+		clientLogin.getMedicalHistory().setNumberOfHospitalVisits(sc.nextInt());
 		contract.setClient(clientLogin);
-		clientLogin.getMedicalHistory().setClientCancerCareer();
 		contract.setInsuranceProduct(selectInsuranceProduct);
 		contract.setInsuranceContractDate(new Date());
 		contract.setInsuranceExpiryDate(selectInsuranceProduct.getPaymentPeriod());
 		contract.setSalesPerson((SalesPerson)managerLogin);
 		contractService.registerInsuranceProduct(contract);
+		
+	}
+	
+	private void contractCancer(InsuranceProduct selectInsuranceProduct) {//미완성
+		Contract contract = new Contract();
+		System.out.println("보장내역(보험요율)을 설정해주세요.");
+		System.out.println("1.췌장암(1.6) 2.폐암(1.5) 3.위암(1.4) 4.대장암(1.3) 5.간암(1.2) 6.기타(1.1)");
+		int input = sc.nextInt();
+		CancerType.values()[input-1].getCancerName();
+		double rate = CancerType.values()[input-1].getRate();
+		System.out.println(CancerType.values()[input-1].getCancerName() + " " + rate);
+		clientLogin.getMedicalHistory().setClientCancerCareer(CancerType.values()[input -1]);
+		System.out.println("병원방문 횟수를 입력해주세요.");//병원방문 횟수에 대한 보험요율정하기.
+		clientLogin.getMedicalHistory().setNumberOfHospitalVisits(sc.nextInt());
+		contract.setClient(clientLogin);
+		contract.setInsuranceProduct(selectInsuranceProduct);
+		contract.setInsuranceContractDate(new Date());
+		contract.setInsuranceExpiryDate(selectInsuranceProduct.getPaymentPeriod());
+		contract.setSalesPerson((SalesPerson)managerLogin);
+		contractService.registerInsuranceProduct(contract);
+	}
+
+	private void contractPension(InsuranceProduct selectInsuranceProduct) {//미완성
+		contractAllInsuranceProduct(selectInsuranceProduct);
+	}
+	
+	private void contractLife(InsuranceProduct selectInsuranceProduct) {//미완성
+		contractAllInsuranceProduct(selectInsuranceProduct);
+	}
+	
+	private void contractAllInsuranceProduct(InsuranceProduct selectInsuranceProduct) {//미완성
+		
 	}
 
 	private void clientWorkMenu() {//미완성 //사고 접수 하기 추가(21.05.25)
