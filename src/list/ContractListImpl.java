@@ -1,8 +1,8 @@
 package list;
 
 import java.util.ArrayList;
-
 import entity.Contract;
+import entity.SalesPerson;
 
 public class ContractListImpl implements ContractList{
 	
@@ -25,24 +25,38 @@ public class ContractListImpl implements ContractList{
 	@Override
 	public Contract search(String clientID, String productName) {
 		for(Contract contract : contractList) {
-			if(clientID.equals(contract.getClientID()) && productName.equals(contract.getProductName()))
+			if(clientID.equals(contract.getClient().getId()) && productName.equals(contract.getInsuranceProduct().getProductName()))
 				return contract;
 		}
 		return null;
 	}
 	
-	@Override
-	public ArrayList<Contract> searchByClient(String clientID) {
-		ArrayList<Contract> returnList = new ArrayList<Contract>();
-		for(Contract contract : contractList) {
-			if(clientID.equals(contract.getClientID()))
-				returnList.add(contract);
-		}
-		return returnList;
-	}
 	
 	public ArrayList<Contract> getContractList(){
 		return this.contractList;
 	}
+
+	@Override
+    public ArrayList<Contract> searchByClient(String clientID) {
+        ArrayList<Contract> returnList = new ArrayList<Contract>();
+        for(Contract contract : contractList) {
+            if(clientID.equals(contract.getClient().getId()))
+                returnList.add(contract);
+        }
+        return returnList;
+    }
+	
+	public ArrayList<Contract> calculateExpiredDate(Contract insuranceExpiryDate){
+		Contract calculateExpiredDate = new Contract() ;
+		return this.contractList;
+	}
+	public ArrayList<Contract> searchBySalesPerson (String salesPerson) {
+		   ArrayList<Contract> returnList = new ArrayList<Contract>();
+	        for(Contract contract : contractList) {
+	            if(salesPerson.equals(contract.getSalesPerson().getId()))
+	                returnList.add(contract);
+	        }
+	        return returnList;
+	    }
 	
 }

@@ -51,8 +51,8 @@ public class AccidentDaoImpl implements AccidentDao{
 			query.append("VALUES(?, ?, ?, ?);");
 			conn = this.getConnection();
 			ptmt = conn.prepareStatement(query.toString());
-			ptmt.setString(1, accident.getClient().getId());
-			ptmt.setString(2, accident.getInsuranceProduct().getProductName());
+			//ptmt.setString(1, accident.getClient().getId());
+			//ptmt.setString(2, accident.getInsuranceProduct().getProductName());
 			ptmt.setString(3, accident.getAccidentDetail());
 			ptmt.setDate(4, (Date)accident.getReceptionDate());
 			int rowAmount = ptmt.executeUpdate();

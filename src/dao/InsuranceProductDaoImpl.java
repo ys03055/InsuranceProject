@@ -67,7 +67,7 @@ public class InsuranceProductDaoImpl implements InsuranceProductDao {
 			ptmt.setString(4, insuranceProduct.getInsuranceProductType().toString());
 			ptmt.setInt(5, insuranceProduct.getPaymentCycle());
 			ptmt.setInt(6, insuranceProduct.getPaymentPeriod());
-			ptmt.setInt(7, insuranceProduct.getApproval());
+			//ptmt.setInt(7, insuranceProduct.getApproval());
 			ptmt.executeUpdate();
 			
 			query = new StringBuffer();

@@ -23,12 +23,24 @@ import entity.Cancer;
 import entity.Client;
 import entity.CompensationHandle;
 import entity.Contract;
+import entity.ContractManagement;
 import entity.InsuranceProduct;
 import entity.InsuranceProducts;
 import entity.InsuranceProductsAcceptance;
 import entity.Life;
 import entity.Manager;
 import entity.Pension;
+import entity.SalesPerson;
+import list.ClientList;
+import list.ClientListImpl;
+import list.ContractList;
+import list.ContractListImpl;
+import list.InsuranceProductList;
+import list.InsuranceProductListImpl;
+import list.ManagerList;
+import list.ManagerListImpl;
+import service.AccidentService;
+import service.AccidentServiceImpl;
 import service.ClientService;
 import service.ClientServiceImpl;
 import service.ContractService;
@@ -44,23 +56,21 @@ import type.ManagerType;
 
 public class ConsoleController {
 	private Scanner sc;
-	private ClientService clientService;
-	private InsuranceProductService insuranceProductService;
-	private ManagerService managerService;
-	private ContractService contractService;
-	
 	private Manager managerLogin;
 	private Client clientLogin;
-	
-	
+	private InsuranceProduct insuranceProduct;
+	ManagerService managerService = new ManagerServiceImpl();
+	ManagerList managerList = new ManagerListImpl();
+	InsuranceProductService insuranceProductService = new InsuranceProductServiceImpl();
+	InsuranceProductList insuranceProductList = new InsuranceProductListImpl();
+	ClientService clientService = new ClientServiceImpl();
+	ClientList clientList = new ClientListImpl();
+	ContractService contractService = new ContractServiceImpl();
+	ContractList contractList = new ContractListImpl();
 	
 	public ConsoleController() {
 		this.sc = new Scanner(System.in);
-		this.clientService = new ClientServiceImpl();
-		this.insuranceProductService = new InsuranceProductServiceImpl();
-		this.managerService = new ManagerServiceImpl();
-		this.contractService = new ContractServiceImpl();
-		this.contractService.association(insuranceProductService.getInsuranceProductList());
+		this.insuranceProduct = new InsuranceProduct();
 		this.managerLogin = null;
 		this.clientLogin = null;
 	}
@@ -545,7 +555,7 @@ public class ConsoleController {
 	
 	private void underwriteClient(Contract contract){
 		if(contract != null) {
-			System.out.println("해당 계약을 승인하시겠습니까? (1. 승인하기, 2. 승인거절)");
+			System.out.println("해당 계약을 승인하시겠습니까? (1. 승인하기 2. 승인거절)");
 			switch(sc.nextInt()) {
 			case 1:
 				contract.setApproval(true);
@@ -559,16 +569,16 @@ public class ConsoleController {
 	}
 	
 	private Contract selectUnderWriteContract() {
-		ArrayList<Contract> contractList = contractService.selectNotApproval();
+		ArrayList<Contract> contractList = contractService.selectByApproval(false);
 		if (contractList.size() > 0) {
 			System.out.println("[인수심사 계약 목록]");
 			for (int i = 0; i < contractList.size(); i++)
-				System.out.println(String.format("%d.%5s%10s", i + 1, contractList.get(i).getClientID(),
-						contractList.get(i).getProductName()));
+				System.out.println(String.format("%d.%5s%10s", i + 1, contractList.get(i).getClient(),
+						contractList.get(i).getInsuranceProduct()));
 			System.out.println("인수심사할 계약의 번호를 입력해주세요.");
 			int input = sc.nextInt();
 			Contract contract = contractList.get(input - 1);
-			this.showClientInfo(contract.getClientID());
+			this.showClientInfo(contract.getClient());
 //			this.showInsuranceProductDetail(contract.getProductName());
 			return contract;
 		} else {
@@ -577,8 +587,7 @@ public class ConsoleController {
 		}
 	}
 	
-	private void showClientInfo(String clientID) {
-		Client client = clientService.login(clientID, clientID);
+	private void showClientInfo(Client client) {
 		System.out.println("[고객 정보]");
 		System.out.println("이름: " + client.getName());
 		System.out.println("나이: " + client.getAge());
@@ -589,10 +598,100 @@ public class ConsoleController {
 		System.out.println("입원내역: " + client.getMedicalHistory().getNumberOfHospitalizations());
 		System.out.println("병원진료: " + client.getMedicalHistory().getNumberOfHospitalVisits());
 	}
-	
+
 	private void contractManagerMenu() {// CM(계약관리자)
-		// ContractManagement contractManagement = (ContractManagement)managerLogin;
-		
+		ContractManagement contractManagement = (ContractManagement) managerLogin;
+		while (true) {
+			System.out.println("\n---ContractManagementMenu---");
+			System.out.println("1. 보험계약관리");
+			System.out.println("2. 만기계약관리");
+			System.out.println("3. 로그아웃");
+			switch (sc.nextInt()) {
+			case 1:
+				this.insuranceContract(contractManagement);
+			case 2:
+				this.showExpiredInsuranceMenu();
+			case 3:
+				managerLogin = null;
+				return;
+			}
+		}
+	}
+	
+	private void insuranceContract(ContractManagement contractManagement) {
+		while (true) {
+			System.out.println("---확인하실 고객 보험계약리스트를 선택해주세요---");
+			System.out.println("1. 실비보험");
+			System.out.println("2. 암보험");
+			System.out.println("3. 종신보험");
+			System.out.println("4. 연금보험");
+			ArrayList<Contract> contractList = contractService
+					.selectByInsuranceProductType(InsuranceProductType.values()[sc.nextInt() - 1]); // sc.nextInt 뒤에 -1추가(추가 안할시 Bounds오류) 21.05.25
+			showContractList(contractList);
+			if (!contractList.isEmpty()) {
+				System.out.println("---상세정보를 확인하실 계약번호를 입력하세요.---");
+				showContractInfo(contractList.get(sc.nextInt() - 1));
+			} else {
+				System.out.println("----계약이 존재하지 않습니다.----\n");
+			}
+		}
+	}
+
+	private void showContractList(ArrayList<Contract> contractList) {
+		int i = 1;
+		for (Contract contract : contractList) {
+			System.out.println("계약 번호 : " + i + "고객 이름 : " + contract.getClient().getName() + "보험 이름 : "
+					+ contract.getInsuranceProduct().getProductName() + "가입 날짜 : " + contract.getInsuranceContractDate()
+					+ "만기 날짜 :" + contract.getInsuranceExpiryDate());
+			i++;
+		}
+	}
+
+	private void showContractInfo(Contract contract) {
+		Client client = contract.getClient();
+		System.out.println("고객 이름: " + client.getName());
+		System.out.println("고객 나이: " + client.getAge());
+		System.out.println("가입한 보험: " + contract.getInsuranceProduct());
+		System.out.println("가입한 날짜: " + contract.getInsuranceContractDate());
+		System.out.println("만기 날짜:" + contract.getInsuranceExpiryDate());
+		System.out.println("계약한 영업사원 이름: " + contract.getSalesPerson());
+	}
+	
+	private void showExpiredInsuranceMenu() {
+		 while (true) {
+	         System.out.println("---만기된 계약 리스트를 볼 보험을 선택해주세요.");
+	         System.out.println("1. 실비보험");
+	         System.out.println("2. 암보험");
+	         System.out.println("3. 종신보험");
+	         System.out.println("4. 연금보험");
+	         ArrayList<Contract> contractList = contractService
+	               .selectByExpiredDate(InsuranceProductType.values()[sc.nextInt()]);
+	         showContractList(contractList);
+	         if(!contractList.isEmpty()) {
+	        	 System.out.println("---상세정보를 확인하실 계약번호를 입력하세요.---");
+	             showExpiredInsuranceInfo(contractList.get(sc.nextInt()-1));
+	         }
+	         else {
+	            System.out.println("----계약이 존재하지 않습니다.----");
+	         }
+	      }
+	}
+	
+	private void showExpiredInsuranceInfo(Contract contract) {
+		Client client = contract.getClient();
+		System.out.println("고객 이름: " + client.getName());
+		System.out.println("고객 나이: " + client.getAge());
+		System.out.println("가입한 보험: " + contract.getInsuranceProduct());
+		System.out.println("만기 날짜:" + contract.getInsuranceExpiryDate());
+		//
+		System.out.println("\n1.만기된 고객 삭제하기");
+		System.out.println("2.돌아가기");
+		switch (sc.nextInt()) {
+		case 1:
+			contractService.deleteExpiredContract(contract);
+		case 2:
+			return;
+		}
 	}
 	
 	private void compensationHandleMenu() {// CH(보상처리자)
@@ -613,55 +712,70 @@ public class ConsoleController {
 	}
 	
 	private void accidentHandlingMenu(CompensationHandle compensationHandle) {
-		while(true) {
+		while (true) {
 			System.out.println("보고싶은 사고의 보험종류를 선택해주세요.");
 			System.out.println("[1.실비보험, 2.암보험, 3.연금보험, 4.종신보험, 5.돌아가기]");
 			int input = sc.nextInt();
-			if(input == 5) break; 
-			ArrayList<Accident> accidentList = contractService.showAccidentListByProductType(InsuranceProductType.values()[input-1]);		
+			if (input == 5)
+				break;
+			ArrayList<Accident> accidentList = contractService
+					.showAccidentListByProductType(InsuranceProductType.values()[input - 1]);
 			System.out.println("[사고 목록]");
 			int i = 0;
-			for(Accident accident : accidentList) {
-				Client client = accident.getClient();
-				System.out.println(String.format("%d.%5s%10s%12s", i+1, client.getName(), accident.getInsuranceProduct().getProductName(), accident.getReceptionDate().toString()));
+			for (Accident accident : accidentList) {
+				Client client = clientList.search(accident.getClientID());
+				System.out.println(String.format("%d.%5s%10s%12s", i + 1, client.getName(), accident.getProductName(),
+						accident.getReceptionDate().toString()));
 				i++;
 			}
 			System.out.println("상세정보를 보고 싶은 사고의 번호를 입력해주세요.");
 			input = sc.nextInt();
-			this.showAccidentDetail(compensationHandle, accidentList.get(input-1));
+			this.showAccidentDetail(compensationHandle, accidentList.get(input - 1));
 		}
 	}
 	
 	private void showAccidentDetail(CompensationHandle compensationHandle, Accident accident) {
-		Client client = accident.getClient();
+		Client client = clientList.search(accident.getClientID());
 		System.out.println("[상세정보]");
 		System.out.println("고객 이름: " + client.getName());
 		System.out.println("고객 나이: " + client.getAge());
 		System.out.println("접수 내용: " + accident.getAccidentDetail());
 		System.out.println("접수 날짜:" + accident.getReceptionDate());
-		
+
 		System.out.println("\n1.보험금 입력");
 		System.out.println("2.돌아가기");
-		switch(sc.nextInt()) {
-			case 1:
-				System.out.println("보험금을 입력해주세요.");
-				System.out.println(compensationHandle.payInsuranceMoney(sc.nextInt(), client)? "보험금 지급이 완료되었습니다." : "보험금 지급에 실패하였습니다.");
-				break;
-			case 2:
-				return;
+		switch (sc.nextInt()) {
+		case 1:
+			System.out.println("보험금을 입력해주세요.");
+			System.out.println(compensationHandle.payInsuranceMoney(sc.nextInt(), client) ? "보험금 지급이 완료되었습니다."
+					: "보험금 지급에 실패하였습니다.");
+			break;
+		case 2:
+			return;
 		}
 	}
 	
-	private void salesPersonMenu() {//SP(영업사원)
-		while(true) {
+	private void salesPersonMenu() {// SP(영업사원)
+		while (true) {
 			System.out.println("\n---salesPersonMenu---");
 			System.out.println("1.영업 활동 관리");
-			System.out.println("2.모든 보험 조회");
-			System.out.println("4.로그아웃");
-			switch(sc.nextInt()) {
+			System.out.println("2.계약할 수 있는 보험 조회");
+			System.out.println("3.로그아웃"); //4를 3으로 수정 (21.05.25)
+			switch (sc.nextInt()) {
 			case 1:
+				ArrayList<Contract> newList = contractService.searchBySalesPerson (managerLogin.getId());
+				if(newList.isEmpty()) {//계약한 보험이 없을 경우 구현 (21.05.25)
+					System.out.println("---현재 계약한 보험이 없습니다.---");
+					return;
+				}else{
+					System.out.println("---상세 정보를 볼 계약의 번호를 입력하세요.---");
+					this.showContractList(newList);
+				}
+				this.showContractInfo(newList.get(sc.nextInt()-1));
 				break;
 			case 2:
+				InsuranceProduct selectInsuranceProduct = this.insuranceMenu(insuranceProductService.showInsuranceProductIsApproval());
+				this.registeInsuranceProduct(selectInsuranceProduct);//보험 detail이 두번 나오는 현상 해결 (21.05.26)
 				break;
 			case 3:
 				managerLogin = null;
@@ -670,8 +784,45 @@ public class ConsoleController {
 		}
 	}
 	
+	private void registeInsuranceProduct(InsuranceProduct selectInsuranceProduct) {
+		System.out.println("\n---해당 보험을 가입하시겠습니까?---");
+		System.out.println("1.네 2.아니요");
+		switch(sc.nextInt()) {
+		case 1:
+			this.contractClientInsuranceProduct();//clientWorkMenu로 가는 문제때문에 새로운 메소드 생성 (21.05.26)
+			Contract contract = new Contract();
+			contract.setClient(clientLogin);
+			contract.setInsuranceProduct(selectInsuranceProduct);
+			contract.setInsuranceContractDate(new Date());
+			contract.setInsuranceExpiryDate(selectInsuranceProduct.getPaymentPeriod());
+			contract.setSalesPerson((SalesPerson)managerLogin);
+			contractService.registerInsuracneProduct(contract);
+			clientLogin = null;
+		case 2:
+			return;
+		}
+	}
+	
+	private void contractClientInsuranceProduct() {
+		if (clientLogin == null) {sc.nextLine();
+		System.out.println("--고객의 ID를 입력해주세요.--");
+		String id = sc.nextLine();
+		System.out.println("--고객의 PassWord를 입력해주세요.--");
+		String pw = sc.nextLine();
+		clientLogin = clientService.login(id, pw);
+	}
+	if (clientLogin != null) {
+		clientContractMenu();
+	} else
+		System.out.println("입력하신 정보를 확인해주세요.");
+	}
+	
+	private void clientContractMenu() {
+		
+	}
+	
 	private void clientWorkMenu() {//미완성 //사고 접수 하기 추가(21.05.25)
-		System.out.println("1.모든 보험 조회하기 2.가입한 보험 조회하기 3.사고접수하기 4.로그아웃");
+		System.out.println("1.모든 보험 조회하기 2.가입한 보험 조회하기 3.사고접수 4.로그아웃");
 		switch (sc.nextInt()) {
 		case 1:
 			if(insuranceMenu(insuranceProductService.showInsuranceProductIsApproval()) == null) {
@@ -682,7 +833,7 @@ public class ConsoleController {
 		case 2:
 			signUpInsuranceProductMenu();
 		case 3:
-			registerAccident();
+			accidentReception();
 		case 4:
 			clientLogin = null;
 			return;
@@ -702,71 +853,59 @@ public class ConsoleController {
 		}
 	
 	private void signUpInsuranceProductMenu() {//미완성
+		System.out.println("조회할 보험을 선택해주세요.");
+		
+		System.out.println("1.보험 해지하기 2.보험료 납부하기 3.돌아가기");
+		int input = sc.nextInt();
+		switch(input) {
+		case 1:
+			cancelInsuranceProduct();
+			break;
+		case 2:
+			payInsuranceProduct();
+			break;
+		case 3: 
+			return;
+		}
+	}
+	
+	private void cancelInsuranceProduct() {
 		
 	}
 	
-	private InsuranceProduct registerAccidentInsurance(InsuranceProduct registerAccidentInsuranceProduct) {//사고접수하기 관련 메소드 미완성(21.05.25)
-		switch(registerAccidentInsuranceProduct.getInsuranceProductType()) {
-		case ACTUALEXPENSE:
-			return registerActualExpense(registerAccidentInsuranceProduct);
-		case CANCER:
-			return registerCancer(registerAccidentInsuranceProduct);
-		case PENSION:
-			return registerPension(registerAccidentInsuranceProduct);
-		case LIFE:
-			return registerLife(registerAccidentInsuranceProduct);
-		default:
-			return registerAccidentInsuranceProduct;
-		}
-	}
-
-	//private Cancer developCancer(InsuranceProduct insuranceProduct) {//sysout 글 수정 (21.05.24)
-		//Cancer cancer = (Cancer)insuranceProduct;
-		
-	private InsuranceProduct registerLife(InsuranceProduct registerAccidentInsuranceProduct) {//사고접수하기 관련 메소드 미완성(21.05.25)
-		System.out.println("어떤 보험에 대해 사고접수를 신청하시겠습니까?");
-		return registerAccidentInsuranceProduct;
-	}
-
-	private InsuranceProduct registerPension(InsuranceProduct registerAccidentInsuranceProduct) {//사고접수하기 관련 메소드 미완성(21.05.25)
-		System.out.println("어떤 보험에 대해 사고접수를 신청하시겠습니까?");
-		return registerAccidentInsuranceProduct;
-	}
-
-	private InsuranceProduct registerCancer(InsuranceProduct registerAccidentInsuranceProduct) {//사고접수하기 관련 메소드 미완성(21.05.25)
-		System.out.println("어떤 보험에 대해 사고접수를 신청하시겠습니까?");
-		return registerAccidentInsuranceProduct;
-	}
-
-	private ActualExpense registerActualExpense(InsuranceProduct registerAccidentInsuranceProduct) {//사고접수하기 관련 메소드 미완성(21.05.25)
-		ActualExpense accident = (ActualExpense) registerAccidentInsuranceProduct;
-		return null;
+	private void payInsuranceProduct() {
 		
 	}
 
-	private InsuranceProduct registerAccident() {//사고접수하기 관련 메소드 미완성(21.05.25)
-		System.out.println("어떤 보험에 대해 사고접수를 신청하시겠습니까?");
-		System.out.println("1.실비보험");
-		System.out.println("2.암보험");
-		System.out.println("3.연금보험");
-		System.out.println("4.종신보험");
-		while (true) {
-			try {
-				int input = sc.nextInt();
-				sc.nextLine();
-				if (input <= 4) {
-					InsuranceProduct registerAccidentInsuranceProduct = InsuranceProductType.values()[input - 1]
-							.getInsuranceProduct().clone();
-					registerAccidentInsuranceProduct.setInsuranceProductType(InsuranceProductType.values()[input - 1]);
-					return registerAccidentInsuranceProduct;
-				} else {
-					System.out.println("항목을 제대로 선택해주세요.");
-				}
-			} catch (InputMismatchException e) {
-				sc.next();
-				System.out.println("숫자를 입력해주세요.");
-			}
+	private void accidentReception() {//사고접수하기 관련 메소드 미완성(21.05.25)
+		System.out.println("1.사고접수 신청하기 2.사고접수 신청내역 확인하기 3.돌아가기");
+		int input = sc.nextInt();
+		switch(input) {
+		case 1:
+			applyAccidentReception();
+			break;
+		case 2:
+			checkApplyAccidentReception();
+			break;
+		case 3:
+			return;
 		}
+		
+		
+	}
+	
+	private void applyAccidentReception() {
+		
+		// 가입한 보험목록 보여주기
+		// 스캐너로 번호 입력
+		// 제목 내용 입력 후 1.등록 2.돌아가기
+		// 등록하면
+	}
+	
+	private void checkApplyAccidentReception() {
+		//신청한 사고접수 목록
+		//번호 입력
+		//수정 삭제
 	}
 	
 	private void clientMenu() {// clientMenu
