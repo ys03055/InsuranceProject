@@ -34,7 +34,7 @@ public class Contract {
 		Calendar ca = Calendar.getInstance();
 		ca.setTime(this.insuranceContractDate);
 		ca.add(Calendar.YEAR, paymentPeriod);
-		this.insuranceExpiryDate = ca.getTime();
+		this.insuranceExpiryDate = ca.getTime()  ;
 	}
 	
 	public boolean isApproval() {

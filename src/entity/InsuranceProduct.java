@@ -10,8 +10,16 @@ public class InsuranceProduct implements Cloneable{
 	private InsuranceProductType insuranceProductType; 
 	private int paymentCycle;
 	private int paymentPeriod; 
-	private boolean approval; 
+	private boolean approval;
+	private boolean[] month = new boolean[12];
 
+	
+	public boolean[] getMonth() {//contract로 옮기는걸 추천.
+		return month;
+	}
+	public void setMonth(boolean[] month) {
+		this.month = month;
+	}
 	public InsuranceProduct() {
 		this.approval = false;
 	}

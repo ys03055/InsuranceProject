@@ -9,8 +9,8 @@ public class Cancer extends InsuranceProduct {
 	private CancerType guaranteedType;
 
 	public Cancer() {
-		m_CancerHistory.getClientCancerCareer();
-		m_CancerHistory.getFamilyCancerCareer();
+		//m_CancerHistory.getClientCancerCareer();
+		//m_CancerHistory.getFamilyCancerCareer();
 	}
 
 	public CancerType getCancerType() {

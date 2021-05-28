@@ -10,9 +10,9 @@ public enum ClientJobType {
 		this.rate = rate;
 	}
 	public String getJobName() {
-		return this.jobName;
+		return jobName;
 	}
 	public double getRate() {
-		return this.rate;
+		return rate;
 	}
 }
