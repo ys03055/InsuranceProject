@@ -2,7 +2,6 @@ package list;
 
 import java.util.ArrayList;
 import entity.Contract;
-import entity.SalesPerson;
 
 public class ContractListImpl implements ContractList{
 	

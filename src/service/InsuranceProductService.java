@@ -12,5 +12,6 @@ public interface InsuranceProductService {
 	public ArrayList<InsuranceProduct> showInsuranceProductIsNotApproval();
 	public boolean addInsuranceProduct(InsuranceProduct developedProduct);
 	public InsuranceProductList getInsuranceProductList();
+	public boolean deleteInsuranceProduct(InsuranceProduct insuranceProduct);
 	
 }

@@ -9,4 +9,5 @@ public interface AccidentList {
 	public boolean delete(Accident accident);
 	public Accident search(int accidentNum);
 	public ArrayList<Accident> getAccidentList();
+	
 }

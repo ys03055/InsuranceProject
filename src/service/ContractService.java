@@ -13,4 +13,7 @@ public interface ContractService {
 	public boolean deleteExpiredContract (Contract contract);
 	public boolean registerInsuranceProduct (Contract contract);
 	public ArrayList<Contract> searchBySalesPerson (String salesPerson);
+	public ArrayList<Accident> applyAccidentList();
+	public boolean addApplyAccidentList(Accident accident);//추가
+	public boolean deleteApplyAccidentList(Accident accident);//추가
 }

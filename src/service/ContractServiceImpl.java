@@ -23,6 +23,20 @@ public class ContractServiceImpl implements ContractService {
 	public void association(InsuranceProductListImpl insuranceProductListImpl) {
 		this.insuranceProductListImpl = insuranceProductListImpl;
 	}
+	
+	public ArrayList<Accident> applyAccidentList() {
+		return accidentList.getAccidentList();
+		
+	}
+	
+	public boolean addApplyAccidentList(Accident accident) {//추가
+		return accidentList.add(accident);
+	}
+	
+	public boolean deleteApplyAccidentList(Accident accident) {//추가
+		return accidentList.delete(accident);
+	}
+		
 
 	public ArrayList<Contract> selectByApproval(boolean approval) {
 		ArrayList<Contract> list = new ArrayList<Contract>();
@@ -58,10 +72,8 @@ public class ContractServiceImpl implements ContractService {
 	// accident
 	public ArrayList<Accident> showAccidentListByProductType(InsuranceProductType insuranceProductType) {
 		ArrayList<Accident> returnList = new ArrayList<Accident>();
-		String productName = "";
 		for (Accident accident : accidentList.getAccidentList()) {
-			productName = accident.getProductName();
-			if (insuranceProductType == insuranceProductListImpl.search(productName).getInsuranceProductType())
+			if (insuranceProductType == accident.getInsuranceProduct().getInsuranceProductType())
 				returnList.add(accident);
 		}
 		return accidentList.getAccidentList();

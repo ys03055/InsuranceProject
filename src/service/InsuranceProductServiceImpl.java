@@ -24,6 +24,10 @@ public class InsuranceProductServiceImpl implements InsuranceProductService{
 	public ArrayList<InsuranceProduct> showInsuranceProductIsNotApproval() {
 		return insuranceProductList.searchListByApproval(false);
 	}
+	
+	public boolean deleteInsuranceProduct(InsuranceProduct insuranceProduct) {
+		return insuranceProductList.delete(insuranceProduct);
+	}
 
 	public boolean addInsuranceProduct(InsuranceProduct developedProduct) {
 		return insuranceProductList.add(developedProduct);

@@ -1,7 +1,6 @@
 package list;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import entity.Client;
 

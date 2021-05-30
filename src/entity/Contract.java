@@ -9,7 +9,15 @@ public class Contract {
 	private InsuranceProduct insuranceProduct;
 	private SalesPerson salesPerson;
 	private boolean approval;
+	private boolean[] month = new boolean[12];
 
+	
+	public boolean[] getMonth() {//contract로 옮기는걸 추천.
+		return month;
+	}
+	public void setMonth(boolean[] month) {
+		this.month = month;
+	}
 	public Contract() {
 		this.approval = false;
 	}
