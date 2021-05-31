@@ -5,6 +5,7 @@ import type.InsuranceProductType;
 public class InsuranceProduct implements Cloneable{
 
 	private String productName; 
+	public int insuranceProductNum;
 	protected int basicInsurancePremium; 
 	private int insuranceMoney; 
 	private InsuranceProductType insuranceProductType; 
@@ -12,6 +13,13 @@ public class InsuranceProduct implements Cloneable{
 	private int paymentPeriod; 
 	private boolean approval;
 	
+	
+	public int getInsuranceProductNum() {
+		return insuranceProductNum;
+	}
+	public void setInsuranceProductNum(int insuranceProductNum) {
+		this.insuranceProductNum = insuranceProductNum;
+	}
 	public InsuranceProduct() {
 		this.approval = false;
 	}
@@ -71,5 +79,9 @@ public class InsuranceProduct implements Cloneable{
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public int getApproval() {
+		return this.approval ? 1:0;
 	}
 }

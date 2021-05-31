@@ -67,7 +67,6 @@ public class ContractServiceImpl implements ContractService {
 	
 	public boolean deleteExpiredContract (Contract contract) {
 		return contractList.delete(contract);
-		
 	}
 	// accident
 	public ArrayList<Accident> showAccidentListByProductType(InsuranceProductType insuranceProductType) {
@@ -76,7 +75,11 @@ public class ContractServiceImpl implements ContractService {
 			if (insuranceProductType == accident.getInsuranceProduct().getInsuranceProductType())
 				returnList.add(accident);
 		}
-		return accidentList.getAccidentList();
+		return returnList;
+	}
+	
+	public ArrayList<Contract> checkContract(Contract contract) {//Test
+		return contractList.getContractList();
 	}
 	
 	public boolean registerInsuranceProduct (Contract contract) {

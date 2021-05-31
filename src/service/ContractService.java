@@ -16,4 +16,5 @@ public interface ContractService {
 	public ArrayList<Accident> applyAccidentList();
 	public boolean addApplyAccidentList(Accident accident);//추가
 	public boolean deleteApplyAccidentList(Accident accident);//추가
+	public ArrayList<Contract> checkContract(Contract contract);//Test
 }

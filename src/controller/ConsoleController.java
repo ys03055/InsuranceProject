@@ -194,7 +194,7 @@ public class ConsoleController {
 		String pw = sc.nextLine();
 		
 		System.out.println(managerService.delete(id, pw) ? "삭제가 완료되었습니다." : "삭제에 실패하였습니다.");
-		managerLogin =null;//로그인 후 자신의 아이디 삭제되면 로그아웃
+		managerLogin =null;//로그인 후 자신의 아이디 삭제되면 로그아웃(21.05.30)
 		
 	}
 	
@@ -234,7 +234,7 @@ public class ConsoleController {
 				insuranceProductService.addInsuranceProduct(developInsurance(developInsuranceProduct));
 				break;
 			case 2:
-				this.followUpInsurance();//사후관리 미완성
+				this.followUpInsurance();//사후관리 완성
 				break;
 			case 3:
 				managerLogin = null;
@@ -339,7 +339,7 @@ public class ConsoleController {
 		System.out.println("보장내역(보험요율)을 설정해주세요.");
 		System.out.println("1.췌장암(1.6) 2.폐암(1.5) 3.위암(1.4) 4.대장암(1.3) 5.간암(1.2) 6.기타(1.1)");
 		int input = sc.nextInt();
-		cancer.setGuaranteedType(CancerType.values()[input -1]);
+		cancer.setGuaranteedType(CancerType.values()[input -1]);//암보험 nullpointer해결(21.05.30)
 		double rate = CancerType.values()[input-1].getRate();
 		System.out.println(CancerType.values()[input-1].getCancerName() + " " + rate);
 		System.out.println("보험금을 설정해주세요. (단위: 최대 ?원)");
@@ -417,7 +417,7 @@ public class ConsoleController {
 				int i = 1;
 				ArrayList<InsuranceProduct> list = insuranceProductService.showInsuranceProductIsApproval();
 				for (InsuranceProduct insuranceProduct : list) {
-					System.out.println(i + ". " + insuranceProduct.getProductName());// 미완성
+					System.out.println(i + ". " + insuranceProduct.getProductName());
 					i++;
 				}
 				approvalInsuranceDelete(list);// 승인한보험삭제
@@ -441,7 +441,7 @@ public class ConsoleController {
 			System.out.println("승인이 완료되었습니다.");
 			return;
 		case 2:
-			insuranceProductService.deleteInsuranceProduct(insuranceProduct);
+			insuranceProductService.deleteInsuranceProduct(insuranceProduct);//delete추가(21.05.31)
 			System.out.println("승인이 거절 되었습니다. 목록에서 삭제합니다.");
 			return;
 		case 3:
@@ -456,7 +456,7 @@ public class ConsoleController {
 		int y = sc.nextInt();
 		switch(y) {
 		case 1:
-			insuranceProductService.deleteInsuranceProduct(deleteApprovalInsuranceProduct.get(x - 1));
+			insuranceProductService.deleteInsuranceProduct(deleteApprovalInsuranceProduct.get(x - 1));//delete추가(21.05.31)
 			System.out.println(insuranceProductService.showInsuranceProductIsApproval().size());
 			System.out.println("삭제가 완료되었습니다.");
 			break;
@@ -509,7 +509,7 @@ public class ConsoleController {
 	private void followUpInsurance() {//사후관리
 		System.out.println("보험목록에서 사후관리할 보험을 선택해주세요.");
 		InsuranceProduct selectedInsuranceProduct = this.insuranceMenu(insuranceProductService.showInsuranceProductIsApproval());
-		if(selectedInsuranceProduct == null) {//준비된 상품이 없을 시 아래 sysout이 나오는거 수정
+		if(selectedInsuranceProduct == null) {//준비된 상품이 없을 시 아래 sysout이 나오는거 수정 (21.05.31)
 			return;
 		}else {
 			System.out.println("\n해당 보험을 수정하시겠습니까? \n1.수정하기 2.뒤로가기");
@@ -572,8 +572,7 @@ public class ConsoleController {
 				System.out.println("승인이 완료되었습니다.");
 				break;
 			case 2:
-				contractService.deleteExpiredContract(contract);//승인 거절시 목록에서 삭제 추가.
-				
+				contractService.deleteExpiredContract(contract);//승인 거절시 목록에서 삭제 추가.(21.05.31)
 				System.out.println("승인을 거절하였습니다.");
 				break;
 			}
@@ -703,7 +702,7 @@ public class ConsoleController {
 					return;
 				}
 	         ArrayList<Contract> contractList = contractService
-	               .selectByExpiredDate(InsuranceProductType.values()[a]);
+	               .selectByExpiredDate(InsuranceProductType.values()[a - 1]);//4를 입력했을 경우 인덱스 오류 해결.(21.05.31)
 	         showContractList(contractList);
 	         if(!contractList.isEmpty()) {
 	        	 System.out.println("---상세정보를 확인하실 계약번호를 입력하세요.---");
@@ -721,7 +720,6 @@ public class ConsoleController {
 		System.out.println("고객 나이: " + client.getAge());
 		System.out.println("가입한 보험: " + contract.getInsuranceProduct());
 		System.out.println("만기 날짜:" + contract.getInsuranceExpiryDate());
-		//
 		System.out.println("\n1.만기된 고객 삭제하기");
 		System.out.println("2.돌아가기");
 		switch (sc.nextInt()) {
@@ -765,11 +763,11 @@ public class ConsoleController {
 					Client client = accident.getClient();
 					System.out.println((i+1)+". " + "고객이름: " + client.getName() + " 상품명: " + accident.getInsuranceProduct().getProductName()
 							+ " 접수날짜: " + accident.getReceptionDate().toString());
-					System.out.println("상세정보를 보고 싶은 사고의 번호를 입력해주세요.");
-					input = sc.nextInt();
-					this.showAccidentDetail(compensationHandle, accidentList.get(input - 1));
 					i++;
 				}
+				System.out.println("상세정보를 보고 싶은 사고의 번호를 입력해주세요.");
+				input = sc.nextInt();
+				this.showAccidentDetail(compensationHandle, accidentList.get(input - 1));
 			}else {
 				System.out.println("현재 해당 보험의 사고 접수 신청내역이 없습니다.\n");
 				return;
@@ -792,6 +790,7 @@ public class ConsoleController {
 			System.out.println("보험금을 입력해주세요.");
 			System.out.println(compensationHandle.payInsuranceMoney(sc.nextInt(), client) ? "보험금 지급이 완료되었습니다."
 					: "보험금 지급에 실패하였습니다.");
+			contractService.deleteApplyAccidentList(accident);
 			break;
 		case 2:
 			return;
@@ -832,16 +831,18 @@ public class ConsoleController {
 		System.out.println("1.네 2.아니요");
 		switch(sc.nextInt()) {
 		case 1://clientWorkMenu로 가는 문제때문에 새로운 메소드 생성 (21.05.26)
-			if (clientLogin == null) {sc.nextLine();
+			sc.nextLine();
 			System.out.println("--고객의 ID를 입력해주세요.--");
 			String id = sc.nextLine();
 			System.out.println("--고객의 PassWord를 입력해주세요.--");
 			String pw = sc.nextLine();
 			clientLogin = clientService.login(id, pw);
-		}
+		
 		if (clientLogin != null) {
 			clientContractMenu(selectInsuranceProduct);
-		} else
+		} 
+		
+		else
 			System.out.println("입력하신 정보를 확인해주세요.");
 			clientLogin = null;
 		case 2:
@@ -881,7 +882,7 @@ public class ConsoleController {
 		contract.setInsuranceExpiryDate(selectInsuranceProduct.getPaymentPeriod());
 		contract.setSalesPerson((SalesPerson)managerLogin);
 		contractService.registerInsuranceProduct(contract);
-//		System.out.println(ac.calculationRate(clientLogin));
+		System.out.println("고객의 보험료는 " + selectInsuranceProduct.calculationRate(clientLogin) + " 입니다.");
 		System.out.println("계약 작성이 완료되었습니다. 계약 심사 후 보험가입 승인여부가 결정됩니다.");
 	}
 	
@@ -910,7 +911,7 @@ public class ConsoleController {
 		contract.setInsuranceExpiryDate(selectInsuranceProduct.getPaymentPeriod());
 		contract.setSalesPerson((SalesPerson)managerLogin);
 		contractService.registerInsuranceProduct(contract);
-		System.out.println((insuranceProduct.getBasicInsurancePremium()*rate*cancerRate) + "보험료"); //요율에 따른 보험료 측정 - 미완
+		System.out.println("고객의 보험료는 " + selectInsuranceProduct.calculationRate(clientLogin) + " 입니다.");
 		System.out.println("계약 작성이 완료되었습니다. 계약 심사 후 보험가입 승인여부가 결정됩니다.");
 	}
 
@@ -922,6 +923,7 @@ public class ConsoleController {
 		contract.setInsuranceExpiryDate(selectInsuranceProduct.getPaymentPeriod());
 		contract.setSalesPerson((SalesPerson)managerLogin);
 		contractService.registerInsuranceProduct(contract);
+		System.out.println("고객의 보험료는 " + selectInsuranceProduct.calculationRate(clientLogin) + " 입니다.");
 		System.out.println("계약 작성이 완료되었습니다. 계약 심사 후 보험가입 승인여부가 결정됩니다.");
 	}
 	
@@ -933,6 +935,7 @@ public class ConsoleController {
 		contract.setInsuranceExpiryDate(selectInsuranceProduct.getPaymentPeriod());
 		contract.setSalesPerson((SalesPerson)managerLogin);
 		contractService.registerInsuranceProduct(contract);
+		System.out.println("고객의 보험료는 " + selectInsuranceProduct.calculationRate(clientLogin) + " 입니다.");
 		System.out.println("계약 작성이 완료되었습니다. 계약 심사 후 보험가입 승인여부가 결정됩니다.");
 	}
 
@@ -941,11 +944,11 @@ public class ConsoleController {
 		switch (sc.nextInt()) {
 		case 1:
 			if(insuranceMenu(insuranceProductService.showInsuranceProductIsApproval()) == null) {
-				System.out.println("\n이전 페이지로 돌아갑니다.");
 				return;
 			}else {
 				insuranceProductService.showInsuranceProductIsApproval();
-			}	
+			}
+			break;
 		case 2:
 			signUpInsuranceProductMenu();
 			break;
@@ -1125,11 +1128,12 @@ public class ConsoleController {
 			System.out.println("상품명: " + acc.getInsuranceProduct().getProductName());
 			System.out.println("보험종류: " + acc.getInsuranceProduct().getInsuranceProductType());
 			System.out.println("접수날짜: " + acc.getReceptionDate().toString());
+			System.out.println("사고내용: " + acc.getAccidentDetail());
 			System.out.println("\n1.삭제 2.돌아가기");
 			int c = sc.nextInt();
 			switch(c) {
 			case 1:
-				contractService.deleteApplyAccidentList(acc);
+				System.out.println(contractService.deleteApplyAccidentList(acc) ? "사고접수 삭제가 완료되었습니다." : "사고접수 삭제가 실패하였습니다.");
 				break;
 			case 2:
 				return;
@@ -1167,7 +1171,7 @@ public class ConsoleController {
 		sc.nextLine();
 		Client client = new Client();
 		//clientService.checkClientID(client.getId()) == null
-		System.out.println("[ID]");
+		System.out.println("ID");
 		client.setId(sc.nextLine());
 		
 		if(clientService.checkClientID(client.getId()) !=null) {
@@ -1239,6 +1243,7 @@ public class ConsoleController {
 			case 1:
 				clientService.delete(id, pw);
 				System.out.println("삭제가 완료되었습니다.");
+				clientLogin = null;//로그인 상태에서 자신의 아이디 삭제할 때 로그아웃(21.05.31)
 				break;
 			case 2:
 				return false;

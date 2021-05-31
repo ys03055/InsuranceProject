@@ -46,13 +46,13 @@ public class ManagerDaoImpl implements ManagerDao{
 		try {
 			query = new StringBuffer();
 			query.append("INSERT INTO managers");
-			query.append("(name, manager_id, manager_password, age, phone_number, manager_type)");
+			query.append("(name, manager_id, manager_password, age, phone_number, manager_type) ");
 			query.append("VALUES(?, ?, ?, ?, ?, ?);");
 			conn = this.getConnection();
 			ptmt = conn.prepareStatement(query.toString());
 			ptmt.setString(1, manager.getName());
 			ptmt.setString(2, manager.getId());
-			ptmt.setString(3, manager.getId());
+			ptmt.setString(3, manager.getPassword());
 			ptmt.setInt(4, manager.getAge());
 			ptmt.setString(5, manager.getPhoneNumber());
 			ptmt.setString(6, manager.getJobPosition().toString());
@@ -100,6 +100,27 @@ public class ManagerDaoImpl implements ManagerDao{
 			ptmt = conn.prepareStatement(query.toString());
 			ptmt.setString(1, managerId);
 			ptmt.setString(2, password);
+			resultSet = ptmt.executeQuery();
+			if(resultSet.next()) {
+				return this.createObject();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			this.close();
+		}
+		return null;
+	}
+	
+	@Override
+	public Manager search(String managerId) {
+		try {
+			query = new StringBuffer();
+			query.append("SELECT * FROM managers ");
+			query.append("WHERE manager_id = ?");
+			conn = this.getConnection();
+			ptmt = conn.prepareStatement(query.toString());
+			ptmt.setString(1, managerId);
 			resultSet = ptmt.executeQuery();
 			if(resultSet.next()) {
 				return this.createObject();

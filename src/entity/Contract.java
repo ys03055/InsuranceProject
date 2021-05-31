@@ -7,7 +7,7 @@ public class Contract {
 	private Date insuranceContractDate;
 	private Date insuranceExpiryDate;
 	private InsuranceProduct insuranceProduct;
-	private SalesPerson salesPerson;
+	private Manager salesPerson;
 	private boolean approval;
 	private boolean[] month = new boolean[12];
 
@@ -61,11 +61,11 @@ public class Contract {
 		this.insuranceProduct = insuranceProduct;
 	}
 
-	public SalesPerson getSalesPerson() {
+	public Manager getSalesPerson() {
 		return salesPerson;
 	}
 
-	public void setSalesPerson(SalesPerson salesPerson) {
+	public void setSalesPerson(Manager salesPerson) {
 		this.salesPerson = salesPerson;
 	}
 
