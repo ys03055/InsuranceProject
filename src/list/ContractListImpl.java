@@ -1,6 +1,8 @@
 package list;
 
 import java.util.ArrayList;
+import java.util.Date;
+
 import entity.Contract;
 
 public class ContractListImpl implements ContractList{
@@ -9,6 +11,12 @@ public class ContractListImpl implements ContractList{
 	
 	public ContractListImpl() {
 		this.contractList = new ArrayList<Contract>();
+//		Contract contract = new Contract();
+	//	contract.setInsuranceExpiryDate(new Date());
+		//contract.setClient(contract.getClient());
+		//contract.setApproval(true);
+		//contract.setInsuranceProduct(contract.getInsuranceProduct());
+		//contractList.add(contract);
 	}
 
 	@Override

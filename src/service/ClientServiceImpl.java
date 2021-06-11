@@ -1,4 +1,6 @@
 package service;
+import dao.ClientDao;
+import dao.ClientDaoImpl;
 import entity.Client;
 import list.ClientList;
 import list.ClientListImpl;

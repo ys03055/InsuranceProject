@@ -8,7 +8,6 @@ public class ActualExpense extends InsuranceProduct{
 	private int limitOfIndemnity;//보장한도
 	private int limitAge;//제한나이
 	private int selfPayment;//자기부담금
-	private ActualExpenseHistory m_ActualExpenseHistory;
 
 	public ActualExpense() {
 		//m_ActualExpenseHistory.getNumberOfHospitalizations();
@@ -38,12 +37,7 @@ public class ActualExpense extends InsuranceProduct{
 	public void setSelfPayment(int selfPayment) {
 		this.selfPayment = selfPayment;
 	}
-	public ActualExpenseHistory getM_ActualExpenseHistory() {
-		return m_ActualExpenseHistory;
-	}
-	public void setM_ActualExpenseHistory(ActualExpenseHistory m_ActualExpenseHistory) {
-		this.m_ActualExpenseHistory = m_ActualExpenseHistory;
-	}
+	
 	public ActualExpense clone() {
 		return (ActualExpense)super.clone();
 	}
