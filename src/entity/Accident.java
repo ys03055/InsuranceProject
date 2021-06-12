@@ -4,10 +4,10 @@ import java.util.Date;
 
 public class Accident {
 	private int accidentNum;
-    private Client client;
-    private InsuranceProduct insuranceProduct;
-    private String accidentDetail;
-    private Date receptionDate;
+	private Client client;
+	private InsuranceProduct insuranceProduct;
+	private String accidentDetail;
+	private Date receptionDate;
 
 	public int getAccidentNum() {
 		return accidentNum;
@@ -15,7 +15,7 @@ public class Accident {
 	public void setAccidentNum(int accidentNum) {
 		this.accidentNum = accidentNum;
 	}
-	
+
 	public Client getClient() {
 		return client;
 	}

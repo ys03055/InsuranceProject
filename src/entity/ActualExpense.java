@@ -10,8 +10,6 @@ public class ActualExpense extends InsuranceProduct{
 	private int selfPayment;//자기부담금
 
 	public ActualExpense() {
-		//m_ActualExpenseHistory.getNumberOfHospitalizations();
-		//m_ActualExpenseHistory.getNumberOfHospitalVisits();
 	}
 	public ActualExpenseType getActualExpenseType() {
 		return actualExpenseType;
@@ -37,12 +35,46 @@ public class ActualExpense extends InsuranceProduct{
 	public void setSelfPayment(int selfPayment) {
 		this.selfPayment = selfPayment;
 	}
-	
 	public ActualExpense clone() {
 		return (ActualExpense)super.clone();
 	}
+	
 	@Override
 	public double calculationRate(Client client) {
-		return (client.getJob().getRate())*basicInsurancePremium;
+		MedicalHistory medicalHistory = client.getMedicalHistory();
+		double rateHospitalization = this.getRateHospitalization(medicalHistory.getNumberOfHospitalizations());
+		double rateVisits = this.getRateVisits(medicalHistory.getNumberOfHospitalVisits());
+		double rateJob = client.getJob().getRate();
+		return rateHospitalization*rateVisits*rateJob*basicInsurancePremium;
+	}
+	
+	private double getRateHospitalization(int hospitalization) {
+		double rateHospitalization = 1;
+		if(hospitalization >= 5)
+			rateHospitalization = 1.1;
+		else if(hospitalization >= 10)
+			rateHospitalization = 1.2;
+		else if(hospitalization >= 15)
+			rateHospitalization = 1.3;
+		else if(hospitalization >= 20)
+			rateHospitalization = 1.4;
+		else if(hospitalization >= 25)
+			rateHospitalization = 1.5;
+		return rateHospitalization;
+	}
+	
+	private double getRateVisits(int visits) {
+		double rateVisits = 1;
+		if(visits >= 10)
+			rateVisits = 1.1;
+		else if(visits >= 20)
+			rateVisits = 1.2;
+		else if(visits >= 30)
+			rateVisits = 1.3;
+		else if(visits >= 40)
+			rateVisits = 1.4;
+		else if(visits >= 50)
+			rateVisits = 1.5;
+		return rateVisits;
 	}
 }

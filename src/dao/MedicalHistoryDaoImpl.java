@@ -40,6 +40,7 @@ public class MedicalHistoryDaoImpl implements MedicalHistoryDao {
 		}
 	}
 
+	@Override
 	public boolean add(String clientId, MedicalHistory medicalHistory) {
 		boolean success = false;
 		try {
@@ -50,8 +51,10 @@ public class MedicalHistoryDaoImpl implements MedicalHistoryDao {
 			conn = this.getConnection();
 			ptmt = conn.prepareStatement(query.toString());
 			ptmt.setString(1, clientId);
-			ptmt.setString(2, medicalHistory.getClientCancerCareer().toString());
-			ptmt.setString(3, medicalHistory.getFamilyCancerCareer().toString());
+			CancerType clientCancer = medicalHistory.getClientCancerCareer();
+			CancerType familyCancer = medicalHistory.getFamilyCancerCareer();
+			ptmt.setString(2, clientCancer == null? CancerType.HEALTHY.toString() : clientCancer.toString());			
+			ptmt.setString(3, familyCancer == null? CancerType.HEALTHY.toString() : familyCancer.toString());
 			ptmt.setInt(4, medicalHistory.getNumberOfHospitalizations());
 			ptmt.setInt(5, medicalHistory.getNumberOfHospitalVisits());
 			int rowAmount = ptmt.executeUpdate();
@@ -65,17 +68,20 @@ public class MedicalHistoryDaoImpl implements MedicalHistoryDao {
 		return success;
 	}
 
+	@Override
 	public boolean update(String clientId, MedicalHistory medicalHistory) {
 		boolean success = false;
 		try {
 			query = new StringBuffer();
 			query.append("UPDATE medical_historys ");
-			query.append("SET client_cancer_career = ?, family_cancer_career = ?, number_of_hospitalizations = ?, number_of_hospitalVisits = ?");
+			query.append("SET client_cancer_career = ?, family_cancer_career = ?, number_of_hospitalizations = ?, number_of_hospitalVisits = ? ");
 			query.append("WHERE client_id = ?");
 			conn = this.getConnection();
 			ptmt = conn.prepareStatement(query.toString());
-			ptmt.setString(1, medicalHistory.getClientCancerCareer().toString());
-			ptmt.setString(2, medicalHistory.getFamilyCancerCareer().toString());
+			CancerType clientCancer = medicalHistory.getClientCancerCareer();
+			CancerType familyCancer = medicalHistory.getFamilyCancerCareer();
+			ptmt.setString(1, clientCancer == null? CancerType.HEALTHY.toString() : clientCancer.toString());			
+			ptmt.setString(2, familyCancer == null? CancerType.HEALTHY.toString() : familyCancer.toString());
 			ptmt.setInt(3, medicalHistory.getNumberOfHospitalizations());
 			ptmt.setInt(4, medicalHistory.getNumberOfHospitalVisits());
 			ptmt.setString(5, clientId);
@@ -90,6 +96,7 @@ public class MedicalHistoryDaoImpl implements MedicalHistoryDao {
 		return success;
 	}
 
+	@Override
 	public MedicalHistory search(String clientId) {
 		try {
 			query = new StringBuffer();
