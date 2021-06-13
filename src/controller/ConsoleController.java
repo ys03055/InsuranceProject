@@ -868,7 +868,7 @@ public class ConsoleController {
 				if (a < 1 || a > 2) {
 					System.out.println("올바른 값을 입력해주세요.");
 				}
-				switch (sc.nextInt()) {
+				switch (a) {
 				case 1:
 					this.accidentHandlingMenu(compensationHandle);
 					break;

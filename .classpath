@@ -13,6 +13,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/hm539/OneDrive/바탕 화면/mail-1.4.7.jar"/>
 	<classpathentry kind="lib" path="C:/Users/hm539/OneDrive/바탕 화면/jaf-1_1_1/jaf-1.1.1/activation.jar"/>
-	<classpathentry kind="lib" path="C:/Users/hm539/OneDrive/바탕 화면/mysql-connector-java-5.1.42/mysql-connector-java-5.1.42/mysql-connector-java-5.1.42-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/hm539/OneDrive/바탕 화면/mysql-connector-java-8.0.25.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

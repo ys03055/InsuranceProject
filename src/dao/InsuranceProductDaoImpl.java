@@ -82,7 +82,6 @@ public class InsuranceProductDaoImpl implements InsuranceProductDao {
 				conn = this.getConnection();
 				ptmt = conn.prepareStatement(query.toString());
 				ptmt.setString(1, actualExpense.getProductName());
-				System.out.println(actualExpense.getActualExpenseType().toString());
 				ptmt.setString(2, actualExpense.getActualExpenseType().toString());
 				ptmt.setInt(3, actualExpense.getLimitOfIndemnity());
 				ptmt.setInt(4, actualExpense.getLimitAge());
