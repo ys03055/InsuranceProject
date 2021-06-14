@@ -74,7 +74,7 @@ public class InsuranceProduct implements Cloneable {
 		this.paymentPeriod = paymentPeriod;
 	}
 
-	public double calculationRate(Client client) {
+	public int calculationRate(Client client) {
 		return basicInsurancePremium;
 	}
 

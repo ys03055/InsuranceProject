@@ -40,12 +40,12 @@ public class ActualExpense extends InsuranceProduct{
 	}
 	
 	@Override
-	public double calculationRate(Client client) {
+	public int calculationRate(Client client) {
 		MedicalHistory medicalHistory = client.getMedicalHistory();
 		double rateHospitalization = this.getRateHospitalization(medicalHistory.getNumberOfHospitalizations());
 		double rateVisits = this.getRateVisits(medicalHistory.getNumberOfHospitalVisits());
 		double rateJob = client.getJob().getRate();
-		return rateHospitalization*rateVisits*rateJob*basicInsurancePremium;
+		return (int) (rateHospitalization*rateVisits*rateJob*basicInsurancePremium);
 	}
 	
 	private double getRateHospitalization(int hospitalization) {

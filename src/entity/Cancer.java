@@ -38,10 +38,10 @@ public class Cancer extends InsuranceProduct {
 	}
 	
 	@Override
-	public double calculationRate(Client client) {
+	public int calculationRate(Client client) {
 		double clientCancerCareerRate = client.getMedicalHistory().getClientCancerCareer().getRate();
 		double familyCancerCareerRate = client.getMedicalHistory().getFamilyCancerCareer().getRate();
-		return clientCancerCareerRate*familyCancerCareerRate*basicInsurancePremium;
+		return (int) (clientCancerCareerRate*familyCancerCareerRate*basicInsurancePremium);
 	}
 
 }
