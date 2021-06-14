@@ -45,10 +45,10 @@ public class ConsoleController {
 	private Scanner sc;
 	private Manager managerLogin;
 	private Client clientLogin;
-	ManagerService managerService;
-	InsuranceProductService insuranceProductService;
-	ClientService clientService;
-	ContractService contractService;
+	private ManagerService managerService;
+	private InsuranceProductService insuranceProductService;
+	private ClientService clientService;
+	private ContractService contractService;
 
 	public ConsoleController() {
 		this.sc = new Scanner(System.in);
